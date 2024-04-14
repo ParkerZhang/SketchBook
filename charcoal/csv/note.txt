@@ -1,0 +1,10 @@
+curl http://api.open-notify.org/iss-now.json | jq '.'
+{"message": "success", "timestamp": 1712522620, "iss_position": {"latitude": "-28.2083", "longitude": "0.6563"}}
+{
+  "message": "success",
+  "timestamp": 1712522862,
+  "iss_position": {
+    "latitude": "-28.2083",
+    "longitude": "0.6563"
+  }
+}

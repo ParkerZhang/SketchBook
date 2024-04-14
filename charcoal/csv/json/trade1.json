@@ -1,0 +1,29 @@
+{
+  "header": {
+
+    "businessId": "4169050351",
+    "creationTimestamp": "2024-01-09T20:43:38.925Z"
+  },
+
+  "regulator": {
+    "identifier": {
+      "uniqueTransactionId": "LEI3XXXXXXXXXXXX00000000000000999999099999",
+      "annaUPI": "XXXXXXXXXXXX",
+      "tradeId": {
+        "id": "99999",
+        "version": "1"
+      },
+      "originatingTradeId": {
+        "id": "99999"
+      }
+    },
+    "parties": [
+      {
+        "partyId": "38303"
+      }
+    ],
+    "tradeAttributes": {
+      "tradeEvent": "New"
+    }
+  }
+}
