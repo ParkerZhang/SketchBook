@@ -86,7 +86,7 @@ public class JsonObject {
         for (int length; (length = input.read(buffer)) != -1; ) {
             result.write(buffer);
         }
-        _jo = new JSONObject(result.toString(StandardCharsets.UTF_8));
+        _jo = new JSONObject(result.toString());
     }
 
     public String jsonSTring() {
