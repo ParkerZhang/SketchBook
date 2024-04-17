@@ -1,50 +1,88 @@
 package spa;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "UNIQUE_TRANSACTION_ID")
 public class UniqueTransactionId {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @Column(name = "ID", nullable = false)
+    private Long id;
 
-    private long swapId;
-    private long fundid;
-    private String event;
+    @Column(name = "FUNDID", nullable = false)
+    private Long fundid;
+
+    @Column(name = "SWAP_ID", nullable = false)
+    private Long swapId;
+
+    @Column(name = "DATE_TIME")
     private String dateTime;
-    private String uniqueTransactionId;
+
+    @Column(name = "EVENT")
+    private String event;
+
+    @Column(name = "UNIQUE_PRODUCT_ID")
     private String uniqueProductId;
 
-    public long getId() {
+    @Column(name = "UNIQUE_TRANSACTION_ID")
+    private String uniqueTransactionId;
+
+    public Long getId() {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public Long getFundid() {
+        return fundid;
+    }
 
-    public long getSwapId() {
+    public void setFundid(Long fundid) {
+        this.fundid = fundid;
+    }
+
+    public Long getSwapId() {
         return swapId;
     }
 
-    public long getFundid() {
-        return fundid;
+    public void setSwapId(Long swapId) {
+        this.swapId = swapId;
+    }
+
+    public String getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 
     public String getEvent() {
         return event;
     }
 
-    public String getUniqueTransactionId() {
-        return uniqueTransactionId;
+    public void setEvent(String event) {
+        this.event = event;
     }
 
     public String getUniqueProductId() {
         return uniqueProductId;
     }
+
+    public void setUniqueProductId(String uniqueProductId) {
+        this.uniqueProductId = uniqueProductId;
+    }
+
+    public String getUniqueTransactionId() {
+        return uniqueTransactionId;
+    }
+
+    public void setUniqueTransactionId(String uniqueTransactionId) {
+        this.uniqueTransactionId = uniqueTransactionId;
+    }
+
 
     protected UniqueTransactionId() {}
 

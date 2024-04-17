@@ -5,10 +5,10 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.10</version>
+		<version>3.2.4	</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
+	<groupId>scketch.anatomy</groupId>
 	<artifactId>spa</artifactId>
 	<version>0.0.1</version>
 	<name>spa</name>
@@ -19,23 +19,26 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -47,6 +50,23 @@
 					<image>
 						<builder>paketobuildpacks/builder-jammy-base:latest</builder>
 					</image>
+				</configuration>
+			</plugin>
+			<plugin>
+				<!-- run command "mvn hibernate3:hbm2ddl" to generate DLL -->
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>hibernate3-maven-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<hibernatetool>
+						<classpath>
+							<path location="${project.build.directory}/classes" />
+							<path location="${project.basedir}/src/main/resources/META-INF/" />
+						</classpath>
+
+						<jpaconfiguration persistenceunit="galleryPersistenceUnit" />
+						<hbm2ddl create="true" export="false" destdir="${project.basedir}/target" drop="true" outputfilename="mysql.sql" format="true" console="true"/>
+					</hibernatetool>
 				</configuration>
 			</plugin>
 		</plugins>
