@@ -1,0 +1,10 @@
+ls -lrt /home/data/yelp*
+118863795 Mar 17  2022 /home/data/yelp_academic_dataset_business.json
+286958945 Mar 17  2022 /home/data/yelp_academic_dataset_checkin.json
+5341868833 Mar 17  2022 /home/data/yelp_academic_dataset_review.json
+180604475 Mar 17  2022 /home/data/yelp_academic_dataset_tip.json
+3363329011 Mar 17  2022 /home/data/yelp_academic_dataset_user.json
+
+java -Xmx11G -cp target/IndexJson-1.0-jar-with-dependencies.jar scketch.anatomy.Main
+
+# 30seconds
