@@ -3,6 +3,7 @@ package scketch.anatomy;
 import java.io.*;
 
 public class MemJson {
+    private String _name;
     private String _file;
     private byte[][] _mem;
     private int[][] _index;
@@ -10,11 +11,22 @@ public class MemJson {
 
     protected static int[][] _index_cache = new int[7000000][2];
 
-    public MemJson(String file, int mem_size1,int mem_size2  ) throws IOException {
+    public MemJson(String name , String[] params) throws IOException {
+        _name= name;
+        _file = params[0];
+        int mem_size1 = Integer.parseInt(params[1]);
+        int mem_size2 = Integer.parseInt(params[2]);
+        _mem = new byte[mem_size1][mem_size2];
+        load();
+
+    }
+    public MemJson(String name, String file, int mem_size1,int mem_size2  ) throws IOException {
+        _name= name;
         _file = file;
         _mem = new byte[mem_size1][mem_size2];
 
         load();
+
 
     }
 
