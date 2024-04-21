@@ -1,6 +1,12 @@
 package scketch.anatomy;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.lang.String;
+
+import static java.nio.charset.StandardCharsets.*;
+
 
 public class MemJson {
     private String _name;
@@ -11,8 +17,8 @@ public class MemJson {
 
     protected static int[][] _index_cache = new int[7000000][2];
 
-    public MemJson(String name , String[] params) throws IOException {
-        _name= name;
+    public MemJson(String name, String[] params) throws IOException {
+        _name = name;
         _file = params[0];
         int mem_size1 = Integer.parseInt(params[1]);
         int mem_size2 = Integer.parseInt(params[2]);
@@ -20,8 +26,9 @@ public class MemJson {
         load();
 
     }
-    public MemJson(String name, String file, int mem_size1,int mem_size2  ) throws IOException {
-        _name= name;
+
+    public MemJson(String name, String file, int mem_size1, int mem_size2) throws IOException {
+        _name = name;
         _file = file;
         _mem = new byte[mem_size1][mem_size2];
 
@@ -41,7 +48,7 @@ public class MemJson {
 
         fis.close();
 
-        System.out.printf("\n%s:%d\n",_file, indexLines());
+        System.out.printf("\n%s:%d\n", _file, indexLines());
     }
 
     private long indexLines() {
@@ -111,4 +118,46 @@ public class MemJson {
         return line;
     }
 
+    public String get(int idx) {
+        if (idx >= _index.length) {
+            return null;
+        }
+        int length = _mem[0].length;
+        int m, n, x, y;
+        int start, end;
+        m = _index[idx][0];
+        n = _index[idx][1];
+        x = _index[idx][2];
+        y = _index[idx][3];
+        start = m * length + n;
+        end = x * length + y;
+        if (m == x) {
+            return new String(_mem[m], n, end - start + 1);
+        }
+
+        byte[] result = new byte[end - start + 1];
+        int relative_posi = 0;
+
+        for (int i = m; i <= x; i++) {
+            for (int j = 0; j < length; j++) {
+                if (i == m && j == 0) j = n;
+                if (i == x && j > y) {
+                    break;
+                }
+                result[relative_posi] = _mem[i][j];
+                relative_posi++;
+            }
+        }
+
+        return new String(result, 0, relative_posi);
+
+    }
+
+    public int count() {
+        return _index.length;
+    }
+
+    public String getname() {
+        return _name;
+    }
 }
