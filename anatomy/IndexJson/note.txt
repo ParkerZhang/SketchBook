@@ -7,4 +7,6 @@ ls -lrt /home/data/yelp*
 copy APIKEY & application.properties to working folder
 java -Xmx11G -cp .:target/IndexJson-1.0-jar-with-dependencies.jar scketch.anatomy.Main
 
-# 30seconds
+Read 10G in 30seconds
+Single Index 0.3M/m
+Bulk Index 300M/m @5000 records in a batch

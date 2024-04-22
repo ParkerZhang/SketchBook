@@ -1,0 +1,88 @@
+package scketch.anatomy;
+//https://www.elastic.co/guide/en/elasticsearch/client/java-api-client/current/indexing-bulk.html
+
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.util.EntityUtils;
+import org.elasticsearch.client.Request;
+import org.elasticsearch.client.Response;
+import org.elasticsearch.client.RestClient;
+
+import java.io.IOException;
+import java.util.Properties;
+import java.util.concurrent.CompletableFuture;
+
+import static java.lang.Thread.sleep;
+
+public class IndexBulkDocument {
+
+    private static Properties _prop = new Properties();
+    private static String _ApiKey;
+    private static LoadJsons loadJsons = LoadJsons.getInstance();
+
+    private static String[] _files;
+    private static String _host;
+    private static Elastic _es;
+
+    public static void main(String[] args) throws Exception {
+
+        CompletableFuture<Long> completableFuture = CompletableFuture.supplyAsync(() -> {
+                    loadJsons.load();
+                    System.out.println("\nLoaded.");
+                    return null;
+                }
+        );
+        _es = new Elastic();
+        _prop.load(IndexBulkDocument.class.getClassLoader().getResourceAsStream("application.properties"));
+        System.out.printf("\n%s,%s\n", IndexBulkDocument.class.getName(), _prop.getProperty("greeting"));
+        _files = _prop.getProperty("files").split(",");
+
+        String indexName;
+        String[] tmp = _prop.getProperty("range").split(":");
+        int range_start, range_end;
+        range_start = Integer.parseInt(tmp[0]);
+        range_end = Integer.parseInt(tmp[1]);
+
+        for (int i = 0; i < _files.length; i++) {
+            indexName = _files[i];
+            try {
+                _es.createIndex(indexName);
+            } catch (IOException e) {
+                System.out.printf("\n%s,%s\n", IndexBulkDocument.class.getName(), e.getMessage());
+            }
+        }
+
+        while (!completableFuture.isDone()) {
+            System.out.println("Loading...");
+            sleep(1000);
+        }
+
+        System.out.println(loadJsons.get_status());
+        MemJson[] mj = loadJsons.get_mj();
+        int bi_cnt = 0, bi_size = Integer.parseInt(_prop.getProperty("bulksize"));
+        _es.bulkStart();
+        for (int cnt = 0; cnt < mj.length; cnt++) {
+            indexName = mj[cnt].getname();
+            bi_cnt = 0;
+            for (int i = 0; i < mj[cnt].count(); i++) {
+                if (i < range_start) i = range_start;
+                if (i > range_end && range_end != -1) break;
+                _es.bulkIndexDocument(indexName, String.format("%d", i), mj[0].get(i));
+                bi_cnt++;
+                if (bi_cnt >= bi_size) {
+                    _es.bulkFlush();
+                    bi_cnt = 0;
+                }
+            }
+            if (bi_cnt > 0) {
+                _es.bulkFlush();
+                bi_cnt = 0;
+            }
+        }
+        _es.close();
+        System.out.printf("\n%s,%s\n", IndexBulkDocument.class.getName(), _prop.getProperty("bye"));
+        System.out.flush();
+    }
+}
