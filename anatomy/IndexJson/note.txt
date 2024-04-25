@@ -10,3 +10,76 @@ java -Xmx11G -cp .:target/IndexJson-1.0-jar-with-dependencies.jar scketch.anatom
 Read 10G in 30seconds
 Single Index 0.3M/m
 Bulk Index 300M/m @5000 records in a batch
+************************************************************************************
+
+check number of record for  business_id _ab50qdWOk0DdB6XOrBitw
+
+7673 vs 7674
+
+json file has one more record, the value is in "review_id". 
+
+Tool used:
+    Kibana running query grouping by,
+    dremio for downloading ,
+    grep
+    jq : extract json fields
+        jq '.["review_id"]' dremio_7673.json >d.txt
+        grep _ab50qdWOk0DdB6XOrBitw *review* >raw.json
+        jq '.["review_id"]' raw.json >r.txt
+        sort d.txt> d_sorted.txt
+        sort r.txt> r_sorted.txt
+        diff d_sorted.txt r_sorted.txt
+        grep _ab50qdWOk0DdB6XOrBitw raw.json
+    => sort =>  diff
+        sort d.txt> d_sorted.txt
+        sort r.txt> r_sorted.txt
+        diff d_sorted.txt r_sorted.txt
+
+Kibana :
+GET /review_2/_search
+{
+  "size" : 0,
+  "aggs" : {
+    "user_grp" : {
+        "terms": {
+        "field": "business_id.keyword"
+      }
+    }
+    
+  }
+}
+
+"buckets": [
+        {
+          "key": "_ab50qdWOk0DdB6XOrBitw",
+          "doc_count": 7673
+        }
+linux count:
+grep _ab50qdWOk0DdB6XOrBitw yelp_academic_dataset_review.json |wc
+   7674  682589 5177658
+
+GET /review_2/_search
+{
+  "size" : 0,
+  "aggs" : {
+    "user_grp" : {
+        "terms": {
+        "field": "user_id.keyword"
+      }
+    }
+    
+  }
+}
+
+GET /review_2/_search
+{
+  "size" : 10000,
+  "query" : {
+    "match" : {
+      "business_id.keyword" : "_ab50qdWOk0DdB6XOrBitw"
+    }
+  }
+}
+
+
+

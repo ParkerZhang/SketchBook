@@ -5,6 +5,7 @@ import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.ElasticsearchException;
 import co.elastic.clients.elasticsearch.core.BulkRequest;
 import co.elastic.clients.elasticsearch.core.BulkResponse;
+import co.elastic.clients.elasticsearch.core.GetResponse;
 import co.elastic.clients.elasticsearch.core.IndexResponse;
 import co.elastic.clients.elasticsearch.core.bulk.BulkResponseItem;
 import co.elastic.clients.elasticsearch.indices.CreateIndexRequest;
@@ -14,6 +15,7 @@ import co.elastic.clients.json.JsonpMapper;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.json.spi.JsonProvider;
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
@@ -115,7 +117,7 @@ public class Elastic {
 
         if (result.errors()) {
             System.out.printf("Bulk had errors");
-            for (BulkResponseItem item: result.items()) {
+            for (BulkResponseItem item : result.items()) {
                 if (item.error() != null) {
                     System.out.printf(item.error().reason());
                 }
@@ -146,4 +148,19 @@ public class Elastic {
     }
 
 
+    public String readingDocumentById(String indexName, String id) throws IOException {
+        GetResponse<ObjectNode> response = _esClient.get(g -> g
+                        .index(indexName)
+                        .id(id),
+                ObjectNode.class);
+        String result = null;
+
+        if (response.found()) {
+            ObjectNode json = response.source();
+            result = json.toString();
+
+        }
+        return result;
+
+    }
 }
