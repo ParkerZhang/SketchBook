@@ -3,13 +3,11 @@ package scketch.anatomy;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.ElasticsearchException;
-import co.elastic.clients.elasticsearch.core.BulkRequest;
-import co.elastic.clients.elasticsearch.core.BulkResponse;
-import co.elastic.clients.elasticsearch.core.GetResponse;
-import co.elastic.clients.elasticsearch.core.IndexResponse;
+import co.elastic.clients.elasticsearch._types.FieldValue;
+import co.elastic.clients.elasticsearch._types.Time;
+import co.elastic.clients.elasticsearch.core.*;
 import co.elastic.clients.elasticsearch.core.bulk.BulkResponseItem;
-import co.elastic.clients.elasticsearch.indices.CreateIndexRequest;
-import co.elastic.clients.elasticsearch.indices.GetIndexRequest;
+import co.elastic.clients.elasticsearch.core.search.Hit;
 import co.elastic.clients.json.JsonData;
 import co.elastic.clients.json.JsonpMapper;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
@@ -20,11 +18,11 @@ import jakarta.json.spi.JsonProvider;
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.message.BasicHeader;
+import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.*;
+import java.util.List;
 import java.util.Properties;
 
 public class Elastic {
@@ -162,5 +160,169 @@ public class Elastic {
         }
         return result;
 
+    }
+
+
+    public String readingDocument(String indexName) throws IOException {
+        ObjectNode json;
+        StringBuilder result = new StringBuilder();
+        List<Hit<ObjectNode>> hits;
+        SearchResponse<ObjectNode> searchResponse = _esClient.search(s -> s.index(indexName).query(q -> {
+                    return q.matchAll(t -> t);
+                }),
+                ObjectNode.class);
+
+
+        hits = searchResponse.hits().hits();
+
+        for (Hit<ObjectNode> hit : hits) {
+            json = hit.source();
+            result.append("\n").append(json.toString());
+        }
+
+        return result.toString();
+
+    }
+
+    public long searchAfterDocument(String indexName, long after, long end, long pageSize, FileOutputStream output) throws IOException {
+//        GET review/_search
+//        {
+//            "runtime_mappings":{
+//            "_doc_id":{
+//                "type":"long",
+//                        "script":{
+//                    "source":"""
+//                            emit(Integer.parseInt(doc['_id'].value));
+//
+//                              """
+//                    }
+//                }
+//            },
+//            "size":1000,
+//                "search_after": [999],
+//            "sort": [
+//                {
+//                    "_doc_id":"asc"
+//                }
+//                ]
+//        }
+        ObjectNode json;
+        StringBuilder result = new StringBuilder();
+        List<Hit<ObjectNode>> hits;
+        long lastSort = -1;
+        FieldValue fv;
+
+        String query = "{" +
+                "\"runtime_mappings\":{" +
+                "\"_doc_id\":{" +
+                "\"type\":\"long\"," +
+                "\"script\":{" +
+                "\"source\":\"" +
+                "emit(Integer.parseInt(doc['_id'].value));\"" +
+                "}" +
+                "}" +
+                "}," +
+                "\"size\":%d," +
+                "\"search_after\": [%d]," +
+                "\"sort\": [" +
+                "{" +
+                "\"_doc_id\":\"asc\"" +
+                "}" +
+                "]" +
+                "}";
+        Reader reader = new StringReader(
+                String.format(query, pageSize, after)
+        );
+
+
+        SearchRequest searchRequest = new SearchRequest.Builder().withJson(reader).index(indexName).build();
+        SearchResponse<ObjectNode> searchResponse = _esClient.search(searchRequest, ObjectNode.class);
+        boolean firstLine = true;
+        for (hits = searchResponse.hits().hits(); hits.size() > 0; hits = searchResponse.hits().hits()) {
+            for (Hit<ObjectNode> hit : hits) {
+                fv = (FieldValue) hit.sort().toArray()[0];
+                lastSort = fv.longValue();
+                if (firstLine) {
+                    firstLine = false;
+                    output.write(hit.source().toString().getBytes("UTF-8"));
+                } else {
+                    output.write(10); // \n
+                    output.write(hit.source().toString().getBytes("UTF-8"));
+
+                }
+                if (lastSort >= end && end >= 0)
+                    break;
+            }
+            System.out.println(lastSort);
+
+            output.flush();
+            if (lastSort >= end && end >= 0)
+                break;
+            reader = new StringReader(
+                    String.format(query, pageSize, lastSort)
+            );
+            searchRequest = new SearchRequest.Builder().withJson(reader).index(indexName).build();
+            searchResponse = _esClient.search(searchRequest, ObjectNode.class);
+        }
+        return lastSort;
+    }
+
+    public long searchAfterPITDocument(String indexName, long after, long end, long pageSize, FileOutputStream output) throws IOException {
+        /*
+        POST /my-index-000001/_pit?keep_alive=1m
+        POST /_search
+        {
+            "size": 100,
+                "query": {
+            "match" : {
+                "title" : "elasticsearch"
+            }
+        },
+            "pit": {
+            "id":  "46ToAwMDaWR5BXV1aWQyKwZub2RlXzMAAAAAAAAAACoBYwADaWR4BXV1aWQxAgZub2RlXzEAAAAAAAAAAAEBYQADaWR5BXV1aWQyKgZub2RlXzIAAAAAAAAAAAwBYgACBXV1aWQyAAAFdXVpZDEAAQltYXRjaF9hbGw_gAAAAA==",
+                    "keep_alive": "1m"
+        }
+
+
+            GET /_search
+            {
+                "slice": {
+                "id": 0,
+                        "max": 2
+            },
+                "query": {
+                "match": {
+                    "message": "foo"
+                }
+            },
+                "pit": {
+                "id": "46ToAwMDaWR5BXV1aWQyKwZub2RlXzMAAAAAAAAAACoBYwADaWR4BXV1aWQxAgZub2RlXzEAAAAAAAAAAAEBYQADaWR5BXV1aWQyKgZub2RlXzIAAAAAAAAAAAwBYgACBXV1aWQyAAAFdXVpZDEAAQltYXRjaF9hbGw_gAAAAA=="
+            }
+            }
+
+            GET /_search
+            {
+                "slice": {
+                "id": 1,
+                        "max": 2
+            },
+                "pit": {
+                "id": "46ToAwMDaWR5BXV1aWQyKwZub2RlXzMAAAAAAAAAACoBYwADaWR4BXV1aWQxAgZub2RlXzEAAAAAAAAAAAEBYQADaWR5BXV1aWQyKgZub2RlXzIAAAAAAAAAAAwBYgACBXV1aWQyAAAFdXVpZDEAAQltYXRjaF9hbGw_gAAAAA=="
+            },
+                "query": {
+                "match": {
+                    "message": "foo"
+                }
+            }
+            }
+
+        }
+        DELETE /_pit
+        {
+            "id" : "46ToAwMDaWR5BXV1aWQyKwZub2RlXzMAAAAAAAAAACoBYwADaWR4BXV1aWQxAgZub2RlXzEAAAAAAAAAAAEBYQADaWR5BXV1aWQyKgZub2RlXzIAAAAAAAAAAAwBYgACBXV1aWQyAAAFdXVpZDEAAQltYXRjaF9hbGw_gAAAAA=="
+        }
+*/
+        long lastSort = -1;
+        return lastSort;
     }
 }
