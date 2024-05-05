@@ -8,6 +8,7 @@ import co.elastic.clients.elasticsearch._types.Time;
 import co.elastic.clients.elasticsearch.core.*;
 import co.elastic.clients.elasticsearch.core.bulk.BulkResponseItem;
 import co.elastic.clients.elasticsearch.core.search.Hit;
+import co.elastic.clients.elasticsearch.core.search.PointInTimeReference;
 import co.elastic.clients.json.JsonData;
 import co.elastic.clients.json.JsonpMapper;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
@@ -20,6 +21,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.message.BasicHeader;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
+
 
 import java.io.*;
 import java.util.List;
@@ -267,62 +269,63 @@ public class Elastic {
         return lastSort;
     }
 
-    public long searchAfterPITDocument(String indexName, long after, long end, long pageSize, FileOutputStream output) throws IOException {
-        /*
-        POST /my-index-000001/_pit?keep_alive=1m
-        POST /_search
-        {
-            "size": 100,
-                "query": {
-            "match" : {
-                "title" : "elasticsearch"
-            }
-        },
-            "pit": {
-            "id":  "46ToAwMDaWR5BXV1aWQyKwZub2RlXzMAAAAAAAAAACoBYwADaWR4BXV1aWQxAgZub2RlXzEAAAAAAAAAAAEBYQADaWR5BXV1aWQyKgZub2RlXzIAAAAAAAAAAAwBYgACBXV1aWQyAAAFdXVpZDEAAQltYXRjaF9hbGw_gAAAAA==",
-                    "keep_alive": "1m"
-        }
+    public String searchAfterPITDocument(String indexName,  long pageSize, FileOutputStream output) throws IOException {
+
+        ObjectNode json;
+        StringBuilder result = new StringBuilder();
+        List<Hit<ObjectNode>> hits;
+        String lastSort = "";
+        FieldValue fv;
 
 
-            GET /_search
-            {
-                "slice": {
-                "id": 0,
-                        "max": 2
-            },
-                "query": {
-                "match": {
-                    "message": "foo"
-                }
-            },
-                "pit": {
-                "id": "46ToAwMDaWR5BXV1aWQyKwZub2RlXzMAAAAAAAAAACoBYwADaWR4BXV1aWQxAgZub2RlXzEAAAAAAAAAAAEBYQADaWR5BXV1aWQyKgZub2RlXzIAAAAAAAAAAAwBYgACBXV1aWQyAAAFdXVpZDEAAQltYXRjaF9hbGw_gAAAAA=="
-            }
-            }
+        Time time = new Time.Builder().time("1m").build();
 
-            GET /_search
-            {
-                "slice": {
-                "id": 1,
-                        "max": 2
-            },
-                "pit": {
-                "id": "46ToAwMDaWR5BXV1aWQyKwZub2RlXzMAAAAAAAAAACoBYwADaWR4BXV1aWQxAgZub2RlXzEAAAAAAAAAAAEBYQADaWR5BXV1aWQyKgZub2RlXzIAAAAAAAAAAAwBYgACBXV1aWQyAAAFdXVpZDEAAQltYXRjaF9hbGw_gAAAAA=="
-            },
-                "query": {
-                "match": {
-                    "message": "foo"
+        OpenPointInTimeRequest openRequest = new OpenPointInTimeRequest.Builder().index(indexName).keepAlive(time).build();
+
+
+        OpenPointInTimeResponse openResponse = _esClient.openPointInTime(openRequest);
+        String pitId = openResponse.id();
+
+        PointInTimeReference pointInTimeReference  = new PointInTimeReference.Builder().id(pitId).build();
+        String query = "{\n" +
+                "  \"size\":%d,\n" +
+                " \"search_after\": [\"%s\"] ,\n" +
+                "  \"sort\": [{\"_id\":\"asc\"}]\n" +
+                "  \n" +
+                "}";
+        Reader reader = new StringReader(
+                String.format(query, pageSize, "" )
+        );
+        SearchRequest searchRequest = new SearchRequest.Builder().withJson(reader).pit(pointInTimeReference).build();
+
+        SearchResponse<ObjectNode> searchResponse = _esClient.search(searchRequest, ObjectNode.class);
+
+        boolean firstLine = true;
+        for (hits = searchResponse.hits().hits(); hits.size() > 0; hits = searchResponse.hits().hits()) {
+            for (Hit<ObjectNode> hit : hits) {
+                fv = (FieldValue) hit.sort().toArray()[0];
+                lastSort = fv.stringValue();
+                if (firstLine) {
+                    firstLine = false;
+                    output.write(hit.source().toString().getBytes("UTF-8"));
+                } else {
+                    output.write(10); // \n
+                    output.write(hit.source().toString().getBytes("UTF-8"));
+
                 }
             }
-            }
+            System.out.println(lastSort);
 
+            output.flush();
+
+            reader = new StringReader(
+                    String.format(query, pageSize, lastSort)
+            );
+
+            searchRequest = new SearchRequest.Builder().withJson(reader).pit(pointInTimeReference).build();
+            searchResponse = _esClient.search(searchRequest, ObjectNode.class);
         }
-        DELETE /_pit
-        {
-            "id" : "46ToAwMDaWR5BXV1aWQyKwZub2RlXzMAAAAAAAAAACoBYwADaWR4BXV1aWQxAgZub2RlXzEAAAAAAAAAAAEBYQADaWR5BXV1aWQyKgZub2RlXzIAAAAAAAAAAAwBYgACBXV1aWQyAAAFdXVpZDEAAQltYXRjaF9hbGw_gAAAAA=="
-        }
-*/
-        long lastSort = -1;
         return lastSort;
     }
+
 }
