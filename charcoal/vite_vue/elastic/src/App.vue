@@ -50,7 +50,7 @@ export default {
   mounted() {
 
     const auth = 'ApiKey ' + import.meta.env.VITE_APP_ES_APIKEY;
-    axios.get('https://localhost:9200/_cat/indices?h=index', {headers: {Authorization: 'ApiKey ' + import.meta.env.VITE_APP_ES_APIKEY}})
+    axios.get('http://localhost:3000/_cat/indices?h=index', {headers: {Authorization: 'ApiKey ' + import.meta.env.VITE_APP_ES_APIKEY}})
         .then(response => {
           console.log(response);
           var x = response.data.split('\n');
@@ -69,20 +69,20 @@ export default {
   methods: {
 
 
-    // searchAll_local(hint) {
-    //   axios.get("./data/result.json")
-    //       .then(response => {
-    //             console.log("search.local.then")
-    //             var x = response.data;
-    //             var short = x.map(j => {
-    //               var s = JSON.stringify(j)
-    //               var i = s.toUpperCase().indexOf(hint.toUpperCase())
-    //               return j._index.toString() + ": ..." + s.substring(i - 10, i + 100) + "...  _id:" + j._id
-    //             })
-    //             this.allIndex = short.slice(0,20)
-    //           }
-    //       );
-    // },
+    searchAll_local(hint) {
+      axios.get("./data/result.json")
+          .then(response => {
+                console.log("search.local.then")
+                var x = response.data;
+                var short = x.map(j => {
+                  var s = JSON.stringify(j)
+                  var i = s.toUpperCase().indexOf(hint.toUpperCase())
+                  return j._index.toString() + ": ..." + s.substring(i - 10, i + 100) + "...  _id:" + j._id
+                })
+                this.allIndex = short.slice(0,20)
+              }
+          );
+    },
 
     searchAll(hint) {
       if (this.loading === true)
@@ -90,7 +90,7 @@ export default {
       this.loading = true
       const size = 50
       axios.post(
-          'https://localhost:9200/_search',
+          "http://localhost:3000/_search",
           {
             "query": {
               "simple_query_string": {
