@@ -1,19 +1,24 @@
 <template>
-  <div>
-    <RenderKey :printable-key="myKey"/> <RenderBracket :is-array="isArray" :is-opening-bracket=true />
-  <div id="eachElement" v-for="x in Object.keys(value)">
-    <div id = "arrayElement" v-if="typeof value ==='object'  && Array.isArray(value) " > <RenderValue :printable-value="value[x]" /></div >
-    <div id = "childOjbect"  v-else-if="typeof value[x] === 'object'">
-       <tree :myKey="x" :value="value[x]" :isArray=" Array.isArray(value[x])" />
+  <div :class="[{'vpo-key-value__hover': this.keyHover}, 'vpo-key-value']" v-on:click.stop="collapse" >
+    <span v-on:mouseenter.="mouseenter" v-on:mouseleave.self="mouseleave" > <RenderKey class="vpo-key__object" :printable-key="myKey"/> <RenderBracket :is-array="isArray" :is-opening-bracket=true /> </span>
+    <div v-if="!objectCollapsed" class="vpo-object">
+      <div class="vpo-key-value" id="eachElement" v-for="x in Object.keys(value)">
+        <span id="arrayElement" class="vpo-object" v-if="typeof value ==='object'  && Array.isArray(value) "> <RenderValue
+            :printable-value="value[x]"/></span>
+        <span class="vpo-key__object" id="childOjbect" v-else-if="typeof value[x] === 'object'"  >
+          <tree :myKey="x" :value="value[x]" :isArray=" Array.isArray(value[x])" v-on:mouseover="mouseleave"  />
+        </span>
+        <span v-else> <RenderKey :printable-key="x"/> <RenderValue :printable-value="value[x]"/> </span>
+      </div>
     </div>
-    <div id ="normalElement" v-else> <RenderKey :printable-key="x"/> <RenderValue :printable-value="value[x]"/>  </div>
-  </div >
-  <RenderBracket :is-array="isArray" :is-opening-bracket=false  :is-last-element=true  />
+    <div v-else><span v-on:click.stop="collapse" >...</span></div>
+    <span v-on:mouseenter.="mouseenter" v-on:mouseleave.self="mouseleave" > <RenderBracket :is-array="isArray" :is-opening-bracket=false :is-last-element=true /> </span>
   </div>
+
 </template>
 
 <script>
-import RenderValue  from "./PrintObject/RenderValue.vue";
+import RenderValue from "./PrintObject/RenderValue.vue";
 import RenderBracket from "./PrintObject/RenderBracket.vue";
 import RenderKey from "./PrintObject/RenderKey.vue";
 
@@ -22,9 +27,42 @@ export default {
   props: {
     myKey: {},
     value: {},
-    isArray:{}
+    isArray: {default: false},
+    isCollapsed:{default: false}
   },
-  components : {RenderKey, RenderValue, RenderBracket}
+  data: () => {
+    console.log("RenderKeyValue.data")
+    return {
+      objectCollapsed: false,
+      keyHover: false
+    }
+  },
+
+  components: {RenderKey, RenderValue, RenderBracket}
+  ,
+  methods: {
+    collapse () {
+      this.objectCollapsed = !this.objectCollapsed
+      this.keyHover = false
+      console.log(this.myKey + " clicked")
+    },
+    mouseenter () {
+      this.keyHover = true
+      console.log(this.myKey + " enter")
+    },
+    mouseleave () {
+      this.keyHover = false
+      console.log(this.myKey+ " leave")
+    }
+  },
+  // computed:{
+  //   isInitialCollapsed () {
+  //     return this.isCollapsed;
+  //   }
+  // }
+  mounted () {
+    this.objectCollapsed = false
+  }
 }
 </script>
 

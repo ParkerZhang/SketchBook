@@ -1,11 +1,7 @@
 <template>
-
-    <div class="col">
-      <h2>Uncollapsed</h2>
-<!--<PrintObject :printable-object="myObject" ></PrintObject>-->
-<tree :my-key = "'tree'" :value="comment"> </tree>
-    </div>
-
+  <div class="col">
+    <div class="vpo-wrapper"><tree my-key=x :value="myObject" :is-collapsed="true"></tree></div>
+  </div>
 </template>
 
 <style>
@@ -17,8 +13,8 @@
 </style>
 
 <script>
-import PrintObject from "./components/PrintObject.vue"
 import tree from "./components/tree.vue"
+
 export default {
   data: () => {
     return {
@@ -36,33 +32,10 @@ export default {
       simple: ["A"]
     }
   },
-  computed: {
-    comment() {
-      return {
-        a: 1,
-        b: "hello",
-        c: {
-          d: [3, 4],
-          e: {
-            f: "test"
-          }
-        },
-        g: false
-      }
-    }
-  },
 
   components: {
-
-    PrintObject,
     tree
   }
-  ,
-  setup() {
-    const hasChildren = "false"
-    return {
-      hasChildren
-    }
-  }
+
 }
 </script>

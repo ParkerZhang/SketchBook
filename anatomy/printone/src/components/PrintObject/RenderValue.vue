@@ -1,6 +1,6 @@
 <template>
   <span class="vpo-value">
-    <span :class="valueClass">{{value}}</span><span v-if="!isLastElement">,</span>
+    <span :class="valueClass" >{{value}}</span><span v-if="!isLastElement">,</span>
   </span>
 </template>
 
@@ -12,7 +12,7 @@
     computed: {
       valueClass () {
         const valueType = typeof this.printableValue
-        console.log(typeof this.printableValue)
+        console.log(valueType)
         switch(valueType) {
           case 'string':
             return 'vpo-value--string'
