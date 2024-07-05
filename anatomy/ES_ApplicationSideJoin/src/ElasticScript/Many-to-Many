@@ -1,0 +1,48 @@
+# https://www.elastic.co/guide/en/elasticsearch/guide/master/application-joins.html
+
+
+PUT /my_index/user/1
+{
+  "name":     "John Smith",
+  "email":    "john@smith.com",
+  "dob":      "1970/10/24"
+}
+
+PUT /my_index/blogpost/2
+{
+  "title":    "Relationships",
+  "body":     "It's complicated...",
+  "user":     1
+}
+
+GET /my_index/blogpost/_search
+{
+  "query": {
+    "filtered": {
+      "filter": {
+        "term": { "user": 1 }
+      }
+    }
+  }
+}
+
+
+GET /my_index/user/_search
+{
+  "query": {
+    "match": {
+      "name": "John"
+    }
+  }
+}
+
+GET /my_index/blogpost/_search
+{
+  "query": {
+    "filtered": {
+      "filter": {
+        "terms": { "user": [1] }
+      }
+    }
+  }
+}
