@@ -1,4 +1,4 @@
-package scketch.anatomy;
+package sketch.anatomy;
 
 public class Main {
     public static void main(String[] args) {
