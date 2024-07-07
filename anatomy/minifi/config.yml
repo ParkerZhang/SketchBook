@@ -1,0 +1,146 @@
+MiNiFi Config Version: 3
+Flow Controller:
+  name: toMinifi
+  comment: ''
+Core Properties:
+  flow controller graceful shutdown period: 10 sec
+  flow service write delay interval: 500 ms
+  administrative yield duration: 30 sec
+  bored yield duration: 10 millis
+  max concurrent threads: 1
+  variable registry properties: ''
+FlowFile Repository:
+  implementation: org.apache.nifi.controller.repository.WriteAheadFlowFileRepository
+  partitions: 256
+  checkpoint interval: 2 mins
+  always sync: false
+  Swap:
+    threshold: 20000
+    in period: 5 sec
+    in threads: 1
+    out period: 5 sec
+    out threads: 4
+Content Repository:
+  implementation: org.apache.nifi.controller.repository.FileSystemRepository
+  content claim max appendable size: 10 MB
+  content claim max flow files: 100
+  content repository archive enabled: false
+  content repository archive max retention period: 12 hours
+  content repository archive max usage percentage: 50%
+  always sync: false
+Provenance Repository:
+  provenance rollover time: 1 min
+  implementation: org.apache.nifi.provenance.WriteAheadProvenanceRepository
+  provenance index shard size: 500 MB
+  provenance max storage size: 1 GB
+  provenance max storage time: 24 hours
+  provenance buffer size: 10000
+Component Status Repository:
+  buffer size: 1440
+  snapshot frequency: 1 min
+Security Properties:
+  keystore: ''
+  keystore type: ''
+  keystore password: ''
+  key password: ''
+  truststore: ''
+  truststore type: ''
+  truststore password: ''
+  ssl protocol: ''
+  Sensitive Props:
+    key:
+    algorithm: NIFI_PBKDF2_AES_GCM_256
+Processors:
+- id: 2ee0c71b-6838-3311-0000-000000000000
+  name: GetFile
+  class: org.apache.nifi.processors.standard.GetFile
+  max concurrent tasks: 1
+  scheduling strategy: TIMER_DRIVEN
+  scheduling period: 0 sec
+  penalization period: 30 sec
+  yield period: 1 sec
+  run duration nanos: 0
+  auto-terminated relationships list: []
+  Properties:
+    Batch Size: '10'
+    File Filter: '[^\.].json'
+    Ignore Hidden Files: 'true'
+    Input Directory: /home/data/nifi/in
+    Keep Source File: 'false'
+    Maximum File Age:
+    Maximum File Size:
+    Minimum File Age: 0 sec
+    Minimum File Size: 0 B
+    Path Filter:
+    Polling Interval: 0 sec
+    Recurse Subdirectories: 'true'
+- id: 756baffd-9661-3ade-0000-000000000000
+  name: LogAttribute
+  class: org.apache.nifi.processors.standard.LogAttribute
+  max concurrent tasks: 1
+  scheduling strategy: TIMER_DRIVEN
+  scheduling period: 0 sec
+  penalization period: 30 sec
+  yield period: 1 sec
+  run duration nanos: 25000
+  auto-terminated relationships list:
+  - success
+  Properties:
+    Attributes to Ignore:
+    Attributes to Log:
+    Log FlowFile Properties: 'true'
+    Log Level: info
+    Log Payload: 'false'
+    Log prefix:
+    Output Format: Line per Attribute
+    attributes-to-ignore-regex:
+    attributes-to-log-regex: .*
+    character-set: UTF-8
+- id: 9fa80f29-241a-3394-0000-000000000000
+  name: PutFile
+  class: org.apache.nifi.processors.standard.PutFile
+  max concurrent tasks: 1
+  scheduling strategy: TIMER_DRIVEN
+  scheduling period: 0 sec
+  penalization period: 30 sec
+  yield period: 1 sec
+  run duration nanos: 0
+  auto-terminated relationships list: []
+  Properties:
+    Conflict Resolution Strategy: fail
+    Create Missing Directories: 'true'
+    Directory: /home/data/nifi/out
+    Group:
+    Last Modified Time:
+    Maximum File Count:
+    Owner:
+    Permissions:
+Controller Services: []
+Process Groups: []
+Input Ports: []
+Output Ports: []
+Funnels: []
+Connections:
+- id: 4ff8916c-4d2e-3eae-0000-000000000000
+  name: GetFile/success/PutFile
+  source id: 2ee0c71b-6838-3311-0000-000000000000
+  source relationship names:
+  - success
+  destination id: 9fa80f29-241a-3394-0000-000000000000
+  max work queue size: 10000
+  max work queue data size: 1 GB
+  flowfile expiration: 0 sec
+  queue prioritizer class: ''
+- id: 73205a91-360e-31ba-0000-000000000000
+  name: PutFile/failure/LogAttribute
+  source id: 9fa80f29-241a-3394-0000-000000000000
+  source relationship names:
+  - failure
+  - success
+  destination id: 756baffd-9661-3ade-0000-000000000000
+  max work queue size: 10000
+  max work queue data size: 1 GB
+  flowfile expiration: 0 sec
+  queue prioritizer class: ''
+Remote Process Groups: []
+NiFi Properties Overrides: {}
