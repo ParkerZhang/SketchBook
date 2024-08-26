@@ -1,10 +1,15 @@
 package io.confluent.developer;
 
+import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
+import org.apache.avro.Schema;
+import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.generic.GenericRecordBuilder;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
+import io.confluent.kafka.serializers.KafkaAvroSerializer;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,56 +17,54 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
-import java.util.Random;
 
-import static org.apache.kafka.clients.CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG;
-import static org.apache.kafka.clients.CommonClientConfigs.SECURITY_PROTOCOL_CONFIG;
-import static org.apache.kafka.clients.producer.ProducerConfig.*;
-import static org.apache.kafka.common.config.SaslConfigs.*;
 
 public class ProducerExample {
-
+    static String schema ="{  \"type\":\"record\",  \"namespace\": \"io.confluent.developer.avro\",  \"name\":\"Purchase\",  \"fields\": [    {\"name\": \"item\", \"type\":\"string\"},    {\"name\": \"total_cost\", \"type\": \"double\" },    {\"name\": \"customer_id\", \"type\": \"string\"} , {\"name\": \"purchase_date\", \"type\" : [\"string\",\"null\"],\"default\":\"null\"}  ]}";
+    static String cashflowSchema = "{\"type\":\"record\",\"name\":\"Payment\",\"namespace\":\"io.confluent.developer.avro\",\"fields\":[{\"name\":\"header\",\"type\":{\"type\":\"record\",\"name\":\"Header\",\"fields\":[{\"name\":\"SendTo\",\"type\":\"string\"},{\"name\":\"SourceSystem\",\"type\":\"string\"},{\"name\":\"messageId\",\"type\":\"string\"},{\"name\":\"timestamp\",\"type\":\"string\"}]}},{\"name\":\"payload\",\"type\":{\"type\":\"record\",\"name\":\"Payload\",\"fields\":[{\"name\":\"item\",\"type\":\"string\"},{\"name\":\"total_cost\",\"type\":\"double\"},{\"name\":\"customer_id\",\"type\":\"string\"},{\"name\":\"purchase_date\",\"type\":[\"string\",\"null\"],\"default\":\"null\"}]}}]}";
     public static void main(final String[] args) throws IOException {
-//        final Properties props = new Properties() {{
-//            // User-specific properties that you must set
-//            put(BOOTSTRAP_SERVERS_CONFIG, "<BOOTSTRAP SERVERS>");
-//            put(SASL_JAAS_CONFIG,         "org.apache.kafka.common.security.plain.PlainLoginModule required username='<CLUSTER API KEY>' password='<CLUSTER API SECRET>';");
-//
-//            // Fixed properties
-//            put(KEY_SERIALIZER_CLASS_CONFIG,   StringSerializer.class.getCanonicalName());
-//            put(VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getCanonicalName());
-//            put(ACKS_CONFIG,                   "all");
-//            put(SECURITY_PROTOCOL_CONFIG,      "SASL_SSL");
-//            put(SASL_MECHANISM,                "PLAIN");
-//        }};
+
 
         final Properties config = readConfig("client.properties");
-
-        final String topic = "ist.swapone.payment";
-//        final String topic = "purchases";
+        final String topic = "ist.swapone.cashflow";
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        String[] users = {"eabara", "jsmith", "sgarcia", "jbernard", "htanaka", "awalther"};
-        String[] items = {"book", "alarm clock", "t-shirts", "gift card", "batteries"};
-        try (final Producer<String, String> producer = new KafkaProducer<>(config)) {
-            final Random rnd = new Random();
-            final int numMessages = 10;
-            for (int i = 0; i < numMessages; i++) {
-                String user = users[rnd.nextInt(users.length)];
-                String item = items[rnd.nextInt(items.length)];
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
+        config.put(AbstractKafkaSchemaSerDeConfig.AUTO_REGISTER_SCHEMAS, true);
+        try (final Producer<String, GenericRecord> producer = new KafkaProducer<>(config)) {
+            //  GenericRecord user = new GenericRecordBuilder(new org.apache.avro.Schema.Parser().parse(new File("user.avsc")))
+            //GenericRecord purchase = new GenericRecordBuilder(new Schema.Parser().parse(schema))
 
-                producer.send(
-                        new ProducerRecord<>(topic, user, item),
-                        (event, ex) -> {
-                            if (ex != null)
-                                ex.printStackTrace();
-                            else
-                                System.out.printf("Produced event to topic %s: key = %-10s value = %s%n", topic, user, item);
-                        });
-            }
-            System.out.printf("%s events were produced to topic %s%n", numMessages, topic);
+            Schema paymentSchema = PaymentSchema.createSchema();
+            Schema headerSchema = PaymentSchema.createHeader();
+            Schema payloadSchema = PaymentSchema.createPayload();
+
+            GenericRecord payload = new   //GenericRecordBuilder(new Schema.Parser().parse(schema))
+                     GenericRecordBuilder(payloadSchema)
+                    .set("item", "watch")
+                    .set("total_cost", 30.2)
+                    .set("customer_id", "VIP_25")
+                    .set("purchase_date","2024-08-25")
+                    .build();
+            GenericRecord header = new GenericRecordBuilder(headerSchema)
+                    .set("messageId","12345")
+                    .set("timestamp", "123.456")
+                    .set("SendTo","SWE")
+                    .set("SourceSystem","SwapOne")
+                    .build();
+            GenericRecord purchase = new
+                    //GenericRecordBuilder(new Schema.Parser().parse(cashflowSchema))
+                    GenericRecordBuilder(paymentSchema)
+                    .set("header",header).set("payload",payload).build();
+
+            ProducerRecord<String, GenericRecord> record = new ProducerRecord<>(topic, purchase);
+            producer.send(record);
+            producer.send(record);
+            producer.send(record);
+            producer.send(record);
+            System.out.printf("Record Sent : %s\n", record.toString());
+//            producer.close();
         }
-
+        catch (Exception e) { System.err.println(e.toString());}
     }
 
     public static Properties readConfig(final String configFile) throws IOException {
@@ -75,7 +78,6 @@ public class ProducerExample {
         try (InputStream inputStream = new FileInputStream(configFile)) {
             config.load(inputStream);
         }
-
         return config;
     }
 }
