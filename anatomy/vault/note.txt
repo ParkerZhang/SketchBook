@@ -1,0 +1,9 @@
+Spring Cli 
+	https://docs.spring.io/spring-cli/reference/getting-started.html
+
+	spring boot new my-app
+	mvn spring-boot:run
+	curl http://localhost:8080/greeting
+
+
+curl --header "X-Vault-Token:00000000-0000-0000-0000-000000000000"  --request GET   http://127.0.0.1:8200/v1/secret/data/gs-vault-config
