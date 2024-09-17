@@ -9,6 +9,6 @@ docker stop QM1
 docker start QM1
 
 
-https://localhost:9443/ibmmq/console/
+http://localhost:9443/ibmmq/console/
     admin
     passw0rd
