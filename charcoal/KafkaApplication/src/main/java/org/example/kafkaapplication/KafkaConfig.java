@@ -30,23 +30,33 @@ public class KafkaConfig {
     @Value("${spring.kafka.properties.sasl.jaas.config}")
     private String jaasConfig;
 
-    @Value("${spring.kafka.properties.jaas.username}")
+    @Value("${spring.kafka.properties.jaas.username:#{null}}")
     private String username;
 
-    @Value("${spring.kafka.properties.jaas.password}")
+    @Value("${spring.kafka.properties.jaas.password:#{null}}")
     private String password;
+    final KafkaSecret secret;
+
+    public KafkaConfig(KafkaSecret secret) {
+        this.secret = secret;
+    }
 
     @Bean
     public ProducerFactory<String, String> producerFactory() {
+        String replacedJaas;
+        if (secret.getUsername() != null) {
+            replacedJaas = jaasConfig.replace("{it}", secret.getUsername()).replace("{pwd}", secret.getPassword());
+
+        } else {
+            replacedJaas = jaasConfig.replace("{it}", username).replace("{pwd}", password);
+        }
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put("security.protocol", securityProtocol);
         configProps.put("sasl.mechanism", saslMechanism);
-        configProps.put("sasl.jaas.config", jaasConfig
-                .replace("{it}", username)
-                .replace("{pwd}", password));
+        configProps.put("sasl.jaas.config", replacedJaas);
         configProps.put("acks", acks);
         return new DefaultKafkaProducerFactory<>(configProps);
     }
@@ -59,6 +69,13 @@ public class KafkaConfig {
 
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
+        String replacedJaas;
+        if (secret.getUsername() != null) {
+            replacedJaas = jaasConfig.replace("{it}", secret.getUsername()).replace("{pwd}", secret.getPassword());
+
+        } else {
+            replacedJaas = jaasConfig.replace("{it}", username).replace("{pwd}", password);
+        }
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         configProps.put(ConsumerConfig.GROUP_ID_CONFIG, "my-group");
@@ -66,9 +83,7 @@ public class KafkaConfig {
         configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         configProps.put("security.protocol", securityProtocol);
         configProps.put("sasl.mechanism", saslMechanism);
-        configProps.put("sasl.jaas.config", jaasConfig
-                .replace("{it}", username)
-                .replace("{pwd}", password));
+        configProps.put("sasl.jaas.config", replacedJaas);
         configProps.put("acks", acks);
         return new DefaultKafkaConsumerFactory<>(configProps);
     }
