@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class MessageConsumer102 {
     protected final Log logger = LogFactory.getLog(getClass());
 
-    @JmsListener(destination = "${app.l102.queue.name2}", containerFactory = "myGetContainerFactory102", id="queueGet102")
+//    @JmsListener(destination = "${app.l102.queue.name2}", containerFactory = "myGetContainerFactory102", id="queueGet102")
     public void receiveFromQueue(String message) {
         logger.info("");
         logger.info( this.getClass().getSimpleName());

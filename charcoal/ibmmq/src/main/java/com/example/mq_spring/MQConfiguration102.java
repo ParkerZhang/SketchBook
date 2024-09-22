@@ -13,7 +13,7 @@ import org.springframework.jms.core.JmsTemplate;
 
 import jakarta.jms.ConnectionFactory;
 
-@Configuration
+//@Configuration
 public class MQConfiguration102 {
     protected final Log logger = LogFactory.getLog(getClass());
 
