@@ -9,10 +9,15 @@ public class KafkaController {
 
     @Autowired
     private KafkaProducer kafkaProducer;
+    @Autowired
+    private KafkaBatchControl   kafkaBatchControl;
 
     @GetMapping("/send")
     public String sendMessage(@RequestParam("message") String message) {
+        kafkaBatchControl.batchStart();
         kafkaProducer.sendMessage(message);
+        kafkaBatchControl.batchEnd("one message");
         return "Message sent to Kafka topic";
+
     }
 }

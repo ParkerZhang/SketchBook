@@ -15,3 +15,5 @@ Using HashCorp Vault
 secret will ovwerride properties
     spring.kafka.properties.jaas.username=xxxx
     spring.kafka.properties.jaas.password=xxxx
+
+https://confluent.cloud/environments/env-w1drdj/clusters/lkc-2yj601/topics/my-topic/overview
