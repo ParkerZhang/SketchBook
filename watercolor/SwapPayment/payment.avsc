@@ -1,0 +1,14 @@
+{
+  "type": "record",
+  "name": "Payment",
+  "fields": [
+    {
+      "name": "PaymentId",
+      "type": "long"
+    },
+    {
+      "name": "Amount",
+      "type": "double"
+    }
+  ]
+}

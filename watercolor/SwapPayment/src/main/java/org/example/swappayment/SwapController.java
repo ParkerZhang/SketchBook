@@ -1,13 +1,13 @@
-package org.example.kafkaapplication;
-import org.example.kafkaapplication.KafkaService.KafkaBatchControl;
-import org.example.kafkaapplication.KafkaService.KafkaProducer;
+package org.example.swappayment;
+import org.example.swappayment.KafkaService.KafkaBatchControl;
+import org.example.swappayment.KafkaService.KafkaProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class KafkaController {
+public class SwapController {
 
     @Autowired
     private KafkaProducer kafkaProducer;

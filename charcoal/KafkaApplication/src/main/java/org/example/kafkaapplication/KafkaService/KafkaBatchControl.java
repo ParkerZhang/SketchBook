@@ -1,5 +1,6 @@
-package org.example.kafkaapplication;
+package org.example.kafkaapplication.KafkaService;
 
+import org.example.kafkaapplication.TimeService.TimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;

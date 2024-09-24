@@ -1,8 +1,7 @@
-package org.example.kafkaapplication;
+package org.example.swappayment.VaultService;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("kafka")

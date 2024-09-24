@@ -1,4 +1,4 @@
-package org.example.kafkaapplication;
+package org.example.kafkaapplication.TimeService;
 
 import java.time.Instant;
 import java.time.ZoneId;

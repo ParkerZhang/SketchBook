@@ -75,14 +75,16 @@ public class AvroGenericCompondService {
 
 
     public static void avroToJson() throws IOException {
-        Schema schema = new Schema.Parser().parse(new File("person.avsc"));
+//        Schema schema = new Schema.Parser().parse(new File("person.avsc"));
         File file = new File("person.avro");
-        DatumReader<GenericRecord> datumReader = new GenericDatumReader<GenericRecord>(schema);
+//        DatumReader<GenericRecord> datumReader = new GenericDatumReader<GenericRecord>(schema);
+        DatumReader<GenericRecord> datumReader = new GenericDatumReader<GenericRecord>();
         DataFileReader<GenericRecord> dataFileReader = new DataFileReader<GenericRecord>(file, datumReader);
-        GenericRecord user = null;
+        Schema schema = dataFileReader.getSchema();  // using embedded schema
+        GenericRecord person = null;
         while (dataFileReader.hasNext()) {
-            user = dataFileReader.next(user);
-            System.out.println(user);
+            person = dataFileReader.next(person);
+            System.out.println(person);
 
         }
 
