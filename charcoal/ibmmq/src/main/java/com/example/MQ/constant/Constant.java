@@ -1,4 +1,4 @@
-package com.example.mq_spring;
+package com.example.MQ.constant;
 
 
 public class Constant {
