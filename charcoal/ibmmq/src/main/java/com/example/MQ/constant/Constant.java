@@ -8,6 +8,7 @@ public class Constant {
 
     static public final String DATATYPE = "appdatatype";
     static public final String TEMPQUEUEPREFIX = "AMQ.";
+    public static final String DESTINATION_NAME = "DEV.QUEUE.1";
 
     public enum DataTypes {
         OURDATATYPE(10),

@@ -24,7 +24,7 @@ public class HeartBeat {
     public void run() throws InterruptedException {
         String msg = "About to perform operation " + i++;
 
-        jmsTemplate.convertAndSend("DEV.QUEUE.1", "Lubb-dupp");
+        jmsTemplate.convertAndSend(Constant.DESTINATION_NAME, "Lubb-dupp");
         logger.info(msg);
         Thread.sleep(10000);
     }

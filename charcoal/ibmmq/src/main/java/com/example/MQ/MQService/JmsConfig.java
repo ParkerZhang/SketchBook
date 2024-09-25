@@ -7,11 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.jms.core.JmsTemplate;
 
 
@@ -20,6 +18,12 @@ import org.springframework.jms.core.JmsTemplate;
 @Getter
 @Setter
 public class JmsConfig {
+    private String HOSTNAME;
+    private int PORT;
+    private String QUEUE_MANAGER;
+    private String CHANNEL_NAME;
+    private String USER;
+    private String PASSWORD;
     private static Logger logger = LoggerFactory.getLogger(JmsConfig.class);
 
     @PostConstruct
@@ -43,13 +47,13 @@ public class JmsConfig {
     public MQConnectionFactory connectionFactory() throws Exception {
 //      MQQueueConnectionFactory connectionFactory = new MQQueueConnectionFactory();
         MQConnectionFactory connectionFactory = new MQConnectionFactory(); //?? vs ^
-        connectionFactory.setHostName("localhost");
-        connectionFactory.setPort(1414);
-        connectionFactory.setQueueManager("QM1");
-        connectionFactory.setChannel("DEV.ADMIN.SVRCONN");
+        connectionFactory.setHostName(HOSTNAME);
+        connectionFactory.setPort(PORT);
+        connectionFactory.setQueueManager(QUEUE_MANAGER);
+        connectionFactory.setChannel(CHANNEL_NAME);
         connectionFactory.setTransportType(WMQConstants.WMQ_CM_CLIENT);
-        connectionFactory.setStringProperty(WMQConstants.USERID, "admin");
-        connectionFactory.setStringProperty(WMQConstants.PASSWORD, "passw0rd");
+        connectionFactory.setStringProperty(WMQConstants.USERID, USER);
+        connectionFactory.setStringProperty(WMQConstants.PASSWORD, PASSWORD);
 
 //      connectionFactory.setSSLSocketFactory(SslFactory.getSSLSocketFactory());
 //      connectionFactory.setSSLCipherSuite(sslCipherSuite);

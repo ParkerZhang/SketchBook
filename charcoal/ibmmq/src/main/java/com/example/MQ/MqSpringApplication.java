@@ -1,4 +1,5 @@
 package com.example.MQ;
+import com.example.MQ.constant.Constant;
 import jakarta.jms.JMSException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -20,7 +21,7 @@ public class MqSpringApplication {
     @Autowired
     private JmsTemplate jmsTemplate;
     static boolean warned = false;
-    static final String qName = "DEV.QUEUE.1";
+
     static final String payment = "PaymentId,Amount\n" +
             "1234567,129.99\n" +
             "1234568,33.60\n" +
@@ -40,7 +41,7 @@ public class MqSpringApplication {
     @GetMapping("/send")
     String send(){
         try{
-            jmsTemplate.convertAndSend("DEV.QUEUE.1", "Hello World!");
+            jmsTemplate.convertAndSend(Constant.DESTINATION_NAME, "Hello World!");
             return "OK";
         }catch(JmsException ex){
             ex.printStackTrace();
@@ -50,7 +51,7 @@ public class MqSpringApplication {
     @GetMapping("/pay")
     String pay(){
         try{
-            jmsTemplate.convertAndSend("DEV.QUEUE.1", payment);
+            jmsTemplate.convertAndSend(Constant.DESTINATION_NAME, payment);
             return "OK";
         }catch(JmsException ex){
             ex.printStackTrace();
@@ -61,14 +62,14 @@ public class MqSpringApplication {
     String recv(){
         System.out.println("/recv");
         try{
-            return jmsTemplate.receiveAndConvert("DEV.QUEUE.1").toString();
+            return jmsTemplate.receiveAndConvert(Constant.DESTINATION_NAME).toString();
         }catch(JmsException ex){
             ex.printStackTrace();
             return "FAIL";
         }
     }
 
-    @JmsListener(destination = "DEV.QUEUE.1" ,containerFactory = "")
+    @JmsListener(destination = Constant.DESTINATION_NAME,containerFactory = "")
     public void receiveMessage(String msg) {
         System.out.println("<L>");
 
