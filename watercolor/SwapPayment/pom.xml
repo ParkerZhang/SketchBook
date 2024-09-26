@@ -67,6 +67,16 @@
             <artifactId>opencsv</artifactId>
             <version>5.9</version>
         </dependency>
+        <dependency>
+            <groupId>com.ibm.mq</groupId>
+            <artifactId>mq-jms-spring-boot-starter</artifactId>
+            <version>3.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm.mq</groupId>
+            <artifactId>com.ibm.mq.allclient</artifactId>
+            <version>9.2.2.0</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
