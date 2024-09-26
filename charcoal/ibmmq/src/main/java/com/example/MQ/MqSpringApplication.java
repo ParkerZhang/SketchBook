@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.jms.JmsException;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.annotation.JmsListener;
@@ -69,16 +70,16 @@ public class MqSpringApplication {
         }
     }
 
-    @JmsListener(destination = Constant.DESTINATION_NAME,containerFactory = "")
-    public void receiveMessage(String msg) {
-        System.out.println("<L>");
-
-        Instant instant=Instant.now();
-        System.out.println();
-        System.out.println("========================================");
-        System.out.println("Received message is: " + msg+ " </t> "+instant.toString());
-        System.out.println("========================================");
-
-    }
+//    @JmsListener(destination = "${mq.DESTINATION_NAME}",containerFactory = "")
+//    public void receiveMessage(String msg) {
+//        System.out.println("<L>");
+//
+//        Instant instant=Instant.now();
+//        System.out.println();
+//        System.out.println("========================================");
+//        System.out.println("Received message is: " + msg+ " </t> "+instant.toString());
+//        System.out.println("========================================");
+//
+//    }
 
 }

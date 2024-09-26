@@ -20,12 +20,12 @@ public class HeartBeat {
     @Autowired
     private JmsTemplate jmsTemplate;
 
-    @Scheduled(initialDelay = 5 * Constant.SECOND, fixedRate = 5*Constant.SECOND)
+    @Scheduled(initialDelay = 5 * Constant.SECOND, fixedRate = Constant.HEARTBEAT_RATE)
     public void run() throws InterruptedException {
         String msg = "About to perform operation " + i++;
 
-        jmsTemplate.convertAndSend(Constant.DESTINATION_NAME, "Lubb-dupp");
+        jmsTemplate.convertAndSend(Constant.DESTINATION_NAME, Constant.LUBB_DUPP);
         logger.info(msg);
-        Thread.sleep(10000);
+//        Thread.sleep(Constant.HEARTBEAT_RATE);
     }
 }

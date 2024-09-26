@@ -10,7 +10,7 @@ public class MessageConsumer {
     private static Logger logger = LoggerFactory.getLogger(MessageConsumer.class);
     private static int i =0;
 
-    @JmsListener(destination = Constant.DESTINATION_NAME, containerFactory = "myFactory")
+    @JmsListener(destination = "${mq.DESTINATION_NAME}", containerFactory = "myFactory")
     public void receiveMessage(String message) {
         logger.info("{} Original Message Received  from Queue :: \n{}", ++i, message);
     }
