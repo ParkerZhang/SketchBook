@@ -1,6 +1,9 @@
 package org.example;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.avro.data.TimeConversions;
+import org.apache.commons.lang3.StringUtils;
+
+//import org.apache.commons.lang.StringUtils;
 
 //import org.apache.commons.lang.StringUtils;
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -19,5 +22,8 @@ public class Main {
         System.out.printf("is empty %b\n", StringUtils.isEmpty("hello"));
         System.out.printf("is empty %b\n", StringUtils.isEmpty(""));
         System.out.printf("is empty %b\n", StringUtils.isEmpty(null));
+
+        TimeUtility.test();
+
     }
 }
