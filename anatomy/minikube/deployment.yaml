@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minikube-hello
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minikube-hello
+  template:
+    metadata:
+      labels:
+        app: minikube-hello
+    spec:
+      containers:
+        - name: minikube-hello
+          image: minikube-hello:latest
+          ports:
+            - containerPort: 8080
