@@ -21,9 +21,23 @@ VOLUME /tmp
 COPY target/minikube-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
 
-
+eval $(minikube -p minikube docker-env)
 docker build -t minikube-hello .
+
+
+
+imagePullPolicy: Never  // in deployment.yaml
+
 
 kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml
-minikube service minikube-hello --url  //TODO : Issue: Failed to pull image "minikube-hello:latest": Error response from daemon: pull access denied for minikube-hello, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
+    minikube service minikube-hello --url  //TODO : Issue: Failed to pull image "minikube-hello:latest": Error response from daemon: pull access denied for minikube-hello, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
+
+minikube dashboard
+
+
+-- reset minikube 
+	minikube delete
+
+-- create a cron job
+kubectl apply -f cronjob.yaml

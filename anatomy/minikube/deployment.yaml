@@ -15,5 +15,17 @@ spec:
       containers:
         - name: minikube-hello
           image: minikube-hello:latest
+          env:
+            - name: USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: username
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: password
+          imagePullPolicy: Never
           ports:
             - containerPort: 8080
