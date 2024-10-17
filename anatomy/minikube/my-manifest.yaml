@@ -1,0 +1,30 @@
+---
+# Source: my-hello-world-chart/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: minikube-hello
+  labels:
+    app: minikube-hello
+
+---
+# Source: my-hello-world-chart/templates/deployment_backup.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minikube-hello
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minikube-hello
+  template:
+    metadata:
+      labels:
+        app: minikube-hello
+    spec:
+      containers:
+        - name: minikube-hello
+          image: minikube-hello:latest
+          ports:
+            - containerPort: 8080
