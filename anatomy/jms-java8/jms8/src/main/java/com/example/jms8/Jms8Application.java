@@ -1,0 +1,13 @@
+package com.example.jms8;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class Jms8Application {
+
+	public static void main(String[] args) {
+		SpringApplication.run(Jms8Application.class, args);
+	}
+
+}
