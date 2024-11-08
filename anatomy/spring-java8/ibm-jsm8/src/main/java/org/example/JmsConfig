@@ -1,0 +1,32 @@
+import com.ibm.mq.jms.MQConnectionFactory;
+import com.ibm.msg.client.wmq.WMQConstants;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.annotation.EnableJms;
+import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
+
+import javax.jms.JMSException;
+
+@Configuration
+@EnableJms
+public class JmsConfig {
+
+    @Bean
+    public MQConnectionFactory mqConnectionFactory() throws JMSException {
+        MQConnectionFactory factory = new MQConnectionFactory();
+        factory.setHostName("your-mq-hostname");
+        factory.setPort(1414); // default port
+        factory.setQueueManager("your-queue-manager");
+        factory.setChannel("your-channel");
+        factory.setTransportType(WMQConstants.WMQ_CM_CLIENT);
+        return factory;
+    }
+
+    @Bean
+    public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(MQConnectionFactory mqConnectionFactory) {
+        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+        factory.setConnectionFactory(mqConnectionFactory);
+        factory.setConcurrency("1-1");
+        return factory;
+    }
+}
