@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-shutdown
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-shutdown
+  template:
+    metadata:
+      labels:
+        app: spring-shutdown
+    spec:
+      containers:
+        - name: spring-shutdown
+          image: spring-shutdown:latest
+#          env:
+#            - name: USERNAME
+#              valueFrom:
+#                secretKeyRef:
+#                  name: my-secret
+#                  key: username
+#            - name: PASSWORD
+#              valueFrom:
+#                secretKeyRef:
+#                  name: my-secret
+#                  key: password
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080

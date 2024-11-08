@@ -1,15 +1,14 @@
-package  org.example;
+package org.example;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
 //import org.apache.avro.data.TimeConversions.TimeMillisConversion;
-import org.apache.avro.data.TimeConversions.TimeConversion;
+//import org.apache.avro.data.TimeConversions.TimeConversion;
 import org.joda.time.DateTimeZone;
 //import org.joda.time.LocalDateTime;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+
+import static org.junit.Assert.assertEquals;
 
 public class TimeUtility {
     DateTime joda_dt;
@@ -21,7 +20,7 @@ public class TimeUtility {
         try {
             dt = DateTime.parse(zuluString);
             ldt = dt.toLocalDateTime();
-            System.out.printf("Zulu String %s  \n\tin DateTime : %s,\n\tin localDateTime is : %s\n\tin DateTime(UTC) :%s\n",zuluString,dt,ldt, ldt.toDateTime(DateTimeZone.UTC));
+            System.out.printf("Zulu String %s  \n\tin DateTime : %s,\n\tin localDateTime is : %s\n\tin DateTime(UTC) :%s\n", zuluString, dt, ldt, ldt.toDateTime(DateTimeZone.UTC));
         } catch (Exception ex) {
             System.err.println("DATA issue and ERROR : " + ex.getMessage());
         }
@@ -34,7 +33,7 @@ public class TimeUtility {
         java.time.LocalDateTime ldt = null;
         try {
             dt = java.time.Instant.parse(zuluString);
-            ldt =java.time.LocalDateTime.ofInstant( dt,ZoneId.of("UTC"));
+            ldt = java.time.LocalDateTime.ofInstant(dt, ZoneId.of("UTC"));
         } catch (Exception ex) {
             System.err.println("DATA issue and ERROR : " + ex.getMessage());
         }
@@ -42,30 +41,30 @@ public class TimeUtility {
     }
 
 
-    public static Instant DateTimeToJavaInstant(org.joda.time.DateTime  ldt) {
+    public static Instant DateTimeToJavaInstant(org.joda.time.DateTime ldt) {
         java.time.Instant instant = ldt.toInstant().toDate().toInstant();
         System.out.println("Joda-Time DateTime: " + ldt);
         System.out.println("Converted Instant: " + instant);
         return instant;
     }
 
-    public static void test()
-    {
-        String creationDateTime  = "2024-07-10T19:01:34Z";
+    public static void test() {
+        String creationDateTime = "2024-07-10T19:01:34Z";
         String creationDateTime2 = "2024-09-27T01:51:48Z";
         String swapCreationDateTime = "2024-08-26T15:56:18Z";   //--UTC
         String asofDate = "2024-08-26T23:59:00Z";
-        System.out.printf("\nComparing %s\n",creationDateTime);
+        System.out.printf("\nComparing %s\n", creationDateTime);
         compareTime(creationDateTime);
-        System.out.printf("\nComparing %s\n",creationDateTime2);
+        System.out.printf("\nComparing %s\n", creationDateTime2);
         compareTime(creationDateTime2);
-        System.out.printf("\nComparing %s\n",swapCreationDateTime);
+        System.out.printf("\nComparing %s\n", swapCreationDateTime);
         compareTime(swapCreationDateTime);
-        System.out.printf("\nComparing %s\n",asofDate);
+        System.out.printf("\nComparing %s\n", asofDate);
+compareTime(asofDate.substring(0,19)+"Z");
         Instant instant = Instant.now();
         ZoneId zoneid = ZoneId.of("Europe/London");
         ZoneId localZoneid = ZoneId.systemDefault();
-        System.out.printf("Instant: %s,\t at UTC :%s\t at SystemDefault Zone %s %s\n",instant,instant.atZone(zoneid),localZoneid,instant.atZone(localZoneid).toInstant());
+        System.out.printf("Instant: %s,\t at UTC :%s\t at SystemDefault Zone %s %s\n", instant, instant.atZone(zoneid), localZoneid, instant.atZone(localZoneid).toInstant());
     }
 
     public static void compareTime(String zuluTime) {
@@ -78,8 +77,7 @@ public class TimeUtility {
     }
 
 
-
-    public static LocalDate convertZonedDateTimetoJodaLocalDate(String valuationAsOfString){
+    public static LocalDate convertZonedDateTimetoJodaLocalDate(String valuationAsOfString) {
 
         ZonedDateTime zdt = ZonedDateTime.of(Integer.parseInt(valuationAsOfString.substring(0, 4)),
                 Integer.parseInt(valuationAsOfString.substring(5, 7)),
@@ -95,11 +93,33 @@ public class TimeUtility {
         return dt.toLocalDate();
     }
 
-    public static java.time.LocalDate convertZuluToLocalDate( String zuluString ) {
+    public static java.time.LocalDate convertZuluToLocalDate(String zuluString) {
 
 
         return convertZuluToInstant(zuluString).atZone(ZoneId.of("UTC")).toLocalDate();
     }
 
+    public static String COB(int year, int month, int day) {
+
+        java.time.LocalDate aDay = java.time.LocalDate.of(year, month, day);
+        String theWorkDay = aDay.toString();
+        int hour = 19;
+//        hour = LocalTime.now().getHour();
+        if (aDay.getDayOfWeek() == DayOfWeek.SATURDAY) {
+            theWorkDay = aDay.minusDays(1).toString();
+        } else if (aDay.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            theWorkDay = aDay.minusDays(2).toString();
+        } else if (aDay.getDayOfWeek() == DayOfWeek.MONDAY && hour <= 20) {
+            theWorkDay = aDay.minusDays(3).toString();
+        } else  {
+            if (hour >= 21)
+                theWorkDay = aDay.toString();
+            else theWorkDay = aDay.minusDays(1).toString();
+        }
+
+
+        System.out.printf("COB of %s is %s.\n",aDay,theWorkDay);
+        return theWorkDay;
+    }
 
 }
