@@ -54,3 +54,8 @@ torchrun --nproc_per_node 8 src/entry_point/sft_train.py \
     # --deepspeed configs/deepspeed_config_stage3.json
 	
 	bash scripts/merge_lora.sh
+
+Deep Seek Run Locally
+	https://huggingface.co/deepseek-ai/DeepSeek-V3-Base#6-how-to-run-locally
+
+
