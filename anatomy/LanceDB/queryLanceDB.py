@@ -6,14 +6,10 @@ from langchain_ollama import OllamaEmbeddings
 from langchain_ollama import OllamaLLM
 
 
-doc = fitz.open("DS.pdf")
-texts, metadatas = [], []
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-document=text_splitter.create_documents(texts,metadatas=metadatas)
 embeddings = OllamaEmbeddings(model="deepseek-r1:14b")
 db = lancedb.connect("/tmp/lancedb")
-vectorstore = LanceDB.from_documents(document, embeddings, connection=db)
-llm = OllamaLLM(model="deepseek-r1:14b")
+vectorstore = LanceDB(embedding=embeddings, connection=db)
+llm = OllamaLLM(model="deepseek-r1:7b")
 retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 4})
 qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
 query = "What are the main topics discussed in the documents?"
