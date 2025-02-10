@@ -7,7 +7,14 @@ from langchain_ollama import OllamaLLM
 
 
 embeddings = OllamaEmbeddings(model="deepseek-r1:14b")
-db = lancedb.connect("/tmp/lancedb")
+db = lancedb.connect("./lancedb")
+
+#table_name=db.table_names()[0] 
+#table=db.open_table(table_name)
+#print(table.version)
+#table.checkout(1)
+#print(table.version)
+
 vectorstore = LanceDB(embedding=embeddings, connection=db)
 llm = OllamaLLM(model="deepseek-r1:7b")
 retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 4})
