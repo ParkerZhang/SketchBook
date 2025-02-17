@@ -4,7 +4,7 @@ Original AI-PaperDaily [AI-PaperDaily](javascript:void(0);) 2025年02月12日 19
 
 ## **1. Retrieval-augmented Large Language Models for Financial Time Series Forecasting**
 
-![](_page_0_Figure_5.jpeg)
+![](./Docs/_page_0_Figure_5.jpeg)
 
 股票动量预测是金融时间序列预测里很基础的一项任务,要从大量时间序列数 据里找出关键影响因素。不过,现在那些基于文本训练或者数值相似性的检索 方法,在处理复杂金融分析时,效果不太理想。
 
@@ -16,7 +16,7 @@ Original AI-PaperDaily [AI-PaperDaily](javascript:void(0);) 2025年02月12日 19
 
 **2. Competitive Programming with Large Reasoning Models**
 
-![](_page_1_Figure_4.jpeg)
+![](./Docs/_page_1_Figure_4.jpeg)
 
 我们发现,把强化学习用在大语言模型(LLMs)上,能让它在复杂的编码和 推理任务里,表现有明显提升。
 
@@ -30,7 +30,7 @@ Original AI-PaperDaily [AI-PaperDaily](javascript:void(0);) 2025年02月12日 19
 
 **3. Magic 1-For-1: Generating One Minute Video Clips within One Minute**
 
-![](_page_2_Figure_4.jpeg)
+![](./Docs/_page_2_Figure_4.jpeg)
 
 在本文里,我们提出了Magic 1-For-1(简称Magic141),这是个高效的视频生 成模型,在内存消耗和推理延迟方面都做了优化。
 
