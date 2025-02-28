@@ -1,0 +1,44 @@
+digraph TrumpZelenskyyPost {
+  // Nodes (Entities)
+  Trump [label="Donald J. Trump\nUS President\n2025"];
+  Zelenskyy [label="Volodymyr Zelenskyy\nPresident of Ukraine"];
+  USA [label="United States"];
+  Russia [label="Russia"];
+  WhiteHouse [label="White House\nOval Office\nWashington, D.C.\n(38.8977° N, 77.0365° W)"];
+  Ukraine [label="Ukraine\n(48.3794° N, 31.1656° E)"];
+  Germany [label="Germany\n(51.1657° N, 10.4515° E)"];
+  UK [label="United Kingdom\n(51.5074° N, 0.1278° W)"];
+  Poland [label="Poland\n(51.9194° N, 19.1451° E)"];
+  France [label="France\n(48.8566° N, 2.3522° E)"];
+  Bakhmut [label="Bakhmut\n(48.5956° N, 38.0009° E)"];
+  Pokrovsk [label="Pokrovsk\n(48.2828° N, 37.1758° E)"];
+  Kurakhove [label="Kurakhove\n(47.9852° N, 37.2875° E)"];
+  Kharkiv [label="Kharkiv\n(50.0040° N, 36.2315° E)"];
+
+  // Relationships (Edges)
+  Trump -> Zelenskyy [label="Met Feb 28, 2025\nStrained over peace views"];
+  Trump -> USA [label="President\n2025"];
+  Trump -> WhiteHouse [label="Hosts meeting\nFeb 28, 2025"];
+  Zelenskyy -> Ukraine [label="Leads since 2022"];
+  Zelenskyy -> Trump [label="Accused of disrespect\nFeb 28, 2025"];
+  USA -> Ukraine [label="Aid since 2022\n$69B military"];
+  Ukraine -> Russia [label="War since Feb 24, 2022"];
+  Russia -> Ukraine [label="Invades Feb 24, 2022"];
+  Russia -> Bakhmut [label="Captures May 2023"];
+  Russia -> Kurakhove [label="Captures Late 2024"];
+  Russia -> Pokrovsk [label="Advances 2024-2025"];
+  Russia -> Kharkiv [label="Offensive May 2024"];
+  Germany -> Ukraine [label="Aid $13.6B\n2022-2025"];
+  UK -> Ukraine [label="Aid $10.8B\n2022-2025"];
+  Poland -> Ukraine [label="Aid $3-6B\nLogistical hub"];
+  France -> Ukraine [label="Aid $2-4B\n2022-2025"];
+  USA -> Russia [label="Seeks peace talks\n2025"];
+  WhiteHouse -> USA [label="Seat of power"];
+
+  // Layout
+  { rank=same; Trump; Zelenskyy }
+  { rank=same; USA; Ukraine; Russia }
+  { rank=same; Germany; UK; Poland; France }
+  { rank=same; Bakhmut; Pokrovsk; Kurakhove; Kharkiv }
+}
+

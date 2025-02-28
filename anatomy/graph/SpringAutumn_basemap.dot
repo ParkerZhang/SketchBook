@@ -1,0 +1,107 @@
+digraph SpringAutumn {
+    rankdir=LR; // 从左到右布局，方便显示
+    node [shape=circle, style=filled, fontname="SimSun"]; // 使用宋体显示中文
+    edge [arrowsize=0.5]; // 设置箭头大小为 0.5（窄箭头）
+
+    // 周天子（中心，红色）
+    Zhou [label="周天子", color="red", fillcolor="pink", pos="112.45,34.62!"];
+
+    // 重要亲近国（姬姓，绿色）
+    Lu [label="鲁", color="green", fillcolor="lightgreen", pos="117.1658,35.1136!"];
+    Wei [label="卫", color="green", fillcolor="lightgreen", pos="114.35,34.80!"]; // 假设卫与魏同位置
+    Jin [label="晋", color="green", fillcolor="lightgreen", pos="113.65,37.62!"]; // 假设晋与赵同位置
+    Zheng [label="郑", color="green", fillcolor="lightgreen", pos="113.74,34.48!"]; // 调整位置
+
+    // 主要大国（黄色）
+    Qi [label="齐", color="yellow", fillcolor="lightyellow", pos="118.31,36.82!"];
+    Chu [label="楚", color="yellow", fillcolor="lightyellow", pos="112.24,30.33!"];
+    Qin [label="秦", color="yellow", fillcolor="lightyellow", pos="108.94,34.27!"];
+    Wu [label="吴", color="yellow", fillcolor="lightyellow", pos="120.62,31.31!"];
+
+    // 周天子与亲近国的宗主关系（指向周天子）
+    Lu -> Zhou [label="宗主"];
+    Wei -> Zhou [label="宗主"];
+    Jin -> Zhou [label="宗主"];
+    Zheng -> Zhou [label="宗主"];
+
+    // 主要大国与周天子的关系（竞争或朝贡关系）
+    Qi -> Zhou [label="朝贡", style=dashed];
+    Chu -> Zhou [label="竞争", style=dotted];
+    Qin -> Zhou [label="朝贡", style=dashed];
+    Wu -> Zhou [label="竞争", style=dotted];
+
+    // 主要大国之间的关系（简化示例）
+    Qi -> Chu [label="敌对", style=dotted];
+    Qin -> Jin [label="联盟", style=solid];
+
+    // 添加 Python 图中的节点和边
+    // 节点
+    秦 [label="秦", color="darkred", fillcolor="pink", pos="108.94,34.27!"];
+    齐 [label="齐", color="gold", fillcolor="lightyellow", pos="118.31,36.82!"];
+    楚 [label="楚", color="darkgreen", fillcolor="lightgreen", pos="112.24,30.33!"];
+    燕 [label="燕", color="blue", fillcolor="lightblue", pos="116.41,39.90!"];
+    赵 [label="赵", color="purple", fillcolor="plum", pos="113.65,37.62!"];
+    魏 [label="魏", color="orange", fillcolor="lightyellow", pos="114.35,34.80!"];
+    韩 [label="韩", color="brown", fillcolor="tan", pos="113.74,34.0!"]; // 调整位置
+    宋 [label="宋", color="lightgreen", fillcolor="lightgreen", pos="115.65,34.45!"];
+    郑 [label="郑", color="lightblue", fillcolor="lightblue", pos="113.74,34.48!"]; // 调整位置
+    鲁 [label="鲁", color="green", fillcolor="lightgreen", pos="117.1658,35.1136!"];
+    曲阜 [label="曲阜", color="lime", fillcolor="lightgreen", pos="116.99,35.60!"];
+    吴 [label="吴", color="darkorange", fillcolor="lightyellow", pos="120.62,31.31!"];
+    越 [label="越", color="teal", fillcolor="lightblue", pos="120.58,30.01!"];
+    陈 [label="陈", color="lightgray", fillcolor="lightgray", pos="114.86,33.74!"];
+    虞 [label="虞", color="gray", fillcolor="lightgray", pos="111.77,36.57!"];
+    虢 [label="虢", color="gray", fillcolor="lightgray", pos="110.92,34.52!"];
+    周天子 [label="周天子", color="yellow", fillcolor="lightyellow", pos="112.45,34.62!"];
+
+    // 简化关系
+    // 郑的邻近关系
+    郑 -> 宋;
+    郑 -> 魏;
+    郑 -> 韩;
+    郑 -> 周天子;
+
+    // 韩的邻近关系
+    韩 -> 秦;
+    韩 -> 赵;
+    韩 -> 魏;
+    韩 -> 郑;
+
+    // 宋的邻近关系
+    宋 -> 齐;
+    宋 -> 魏;
+    宋 -> 郑;
+    宋 -> 周天子;
+
+    // 魏的邻近关系
+    魏 -> 赵;
+    魏 -> 韩;
+    魏 -> 郑;
+    魏 -> 周天子;
+
+    // 赵的邻近关系
+    赵 -> 秦;
+    赵 -> 齐;
+    赵 -> 燕;
+    赵 -> 魏;
+    赵 -> 韩;
+
+    // 其他小国的邻近关系
+    陈 -> 楚;
+    陈 -> 宋;
+    陈 -> 郑;
+
+    虞 -> 赵;
+    虞 -> 韩;
+
+    虢 -> 秦;
+    虢 -> 韩;
+
+    // 曲阜作为鲁的核心
+    曲阜 -> 鲁;
+
+    // 吴和越的关系
+    吴 -> 楚;
+    吴 -> 越;
+    越 -> 楚;
+}
