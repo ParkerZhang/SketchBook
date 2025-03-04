@@ -1,0 +1,2 @@
+ffmpeg -i 250107_40WPM.mp3 temp.wav
+python cw_learn.py
