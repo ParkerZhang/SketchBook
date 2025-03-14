@@ -8,7 +8,7 @@ graph = KuzuGraph(database_path="test.db")
 # Create the KuzuQAChain with Ollama as the language model
 chain = KuzuQAChain.from_llm(
     llm=Ollama(
-        model="deepseek-r1:1.5b",
+        model="nomic-embed-text",
         base_url="http://localhost:11434",  # Default Ollama local server endpoint
         temperature=0.3
     ),
