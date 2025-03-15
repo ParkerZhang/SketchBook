@@ -1,0 +1,4 @@
+# requirements.txt
+textual>=0.40.0
+requests>=2.31.0
+elasticsearch>=8.0.0

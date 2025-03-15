@@ -1,0 +1,3 @@
+Just built an AI-powered terminal-based chatbot in hours using Textual and a local Ollama instance, with a little help from Grok (xAI)! This project indexes chat history and files, connects to a local LLM for smart responses, and is ready to scale with Elasticsearch. The best part? From concept to working GUI, it took less than a day—proof of how AI can accelerate development without sacrificing functionality.
+
+Next step: integrating Elasticsearch for advanced search and analytics. Elasticsearch will make it easier to search for swap wrappers and trades, organizing data and presenting it in a human-readable way for better insights. Excited to see where this goes! #AI #Python #Textual #Ollama #Elasticsearch #Innovation
