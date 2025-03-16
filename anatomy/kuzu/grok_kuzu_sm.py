@@ -17,7 +17,7 @@ allowed_relationships = [
 
 # Initialize the local Ollama LLM
 llm = OllamaLLM(
-    model="llama3",  # Replace with your preferred model (e.g., "mistral")
+    model="deepseek-r1:7b",  # Replace with your preferred model (e.g., "mistral")
     base_url="http://localhost:11434",  # Default Ollama server URL
     temperature=0,  # Deterministic output
 )
@@ -49,13 +49,13 @@ csv_file_path = "security_master_updated.csv"
 
 # Convert CSV to text
 text = csv_to_text(csv_file_path)
-
+print(text)
 # Create a LangChain Document from the text
 documents = [Document(page_content=text)]
 
 # Convert text to graph documents
 graph_documents = llm_transformer.convert_to_graph_documents(documents)
-
+print(graph_documents)
 # Print the resulting graph structure
 print("Nodes:")
 for node in graph_documents[0].nodes:
