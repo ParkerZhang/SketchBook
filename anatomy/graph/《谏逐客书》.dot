@@ -1,0 +1,70 @@
+digraph G {
+    // Set overall graph layout
+    rankdir=TB; // Top-to-bottom layout
+    ranksep=2.0; // Increase vertical spacing to avoid overlap
+
+    // Graph-level label (Chinese and English paragraphs at the top)
+    label="昔穆公求士，西取由余于戎，东得百里奚于宛，迎蹇叔于宋，来丕豹、公孙支于晋。\n此五子者，不产于秦，而缪公用之，并国二十，遂霸西戎。孝公用商鞅之法，移风易俗，\n民以殷盛，国以富强，百姓乐用，诸侯亲服，获楚、魏之师，举地千里，至今治强。\n惠王用张仪之计，拔三川之地，西并巴、蜀，北收上郡，南取汉中，包九夷，制鄢、郢，\n东据成皋之险，割膏腴之壤，遂散六国之从，使之西面事秦，功施到今。昭王得范雎，\n废穰侯，逐华阳，强公室，杜私门，蚕食诸侯，使秦成帝业。此四君者，皆以客之功。\n由此观之，客何负于秦哉！向使四君却客而不内，疏士而不用，是使国无富利之实，\n而秦无强大之名也\n\nEnglish Translation:\nIn the past, Duke Mu sought talent, taking You Yu from the Rong in the west, obtaining Baili Xi from Wan in the east,\nwelcoming Jian Shu from Song, and bringing Pi Bao and Gongsun Zhi from Jin. These five individuals were not born in Qin,\nyet Duke Mu employed them, annexing twenty states and dominating the western Rong.\nDuke Xiao adopted Shang Yang’s reforms, transforming customs and traditions, making the people prosperous\nand the state rich and powerful, with the populace willingly serving, the feudal lords submitting,\ndefeating the armies of Chu and Wei, and gaining a thousand li of land, leaving a legacy of governance\nand strength to this day. King Hui used Zhang Yi’s strategies, capturing the Three Rivers region,\nannexing Ba and Shu in the west, seizing Shang Commandery in the north, taking Hanzhong in the south,\nsubduing the Nine Barbarians, controlling Yan and Ying, securing the strategic pass of Chenggao in the east,\nand acquiring fertile lands, ultimately breaking the alliance of the six states, forcing them to serve Qin\nin the west, with achievements that endure to this day. King Zhao obtained Fan Ju, ousting Marquis Rang\nand expelling Huayang, strengthening the royal house, curbing private factions, gradually encroaching\non the feudal lords, and enabling Qin to achieve imperial dominance. These four rulers all relied\non the contributions of foreign guests. From this perspective, how have guests ever failed Qin?\nHad these four rulers rejected their guests and not employed them, or distanced themselves from talented\nindividuals and not used them, the state would have lacked the substance of wealth and profit,\nand Qin would not have gained its reputation as a powerful state.";
+    labelloc="t";  // Place the combined label at the top
+    labeljust="c"; // Center the label
+
+    // Nodes with color attributes
+    "秦穆公" [label="秦穆公", fillcolor="skyblue", style="filled"];
+    "秦孝公" [label="秦孝公", fillcolor="skyblue", style="filled"];
+    "秦惠王" [label="秦惠王", fillcolor="skyblue", style="filled"];
+    "秦昭王" [label="秦昭王", fillcolor="skyblue", style="filled"];
+    "李斯" [label="李斯", fillcolor="skyblue", style="filled"];
+    "由余" [label="由余", fillcolor="skyblue", style="filled"];
+    "百里奚" [label="百里奚", fillcolor="skyblue", style="filled"];
+    "蹇叔" [label="蹇叔", fillcolor="skyblue", style="filled"];
+    "丕豹" [label="丕豹", fillcolor="skyblue", style="filled"];
+    "公孙支" [label="公孙支", fillcolor="skyblue", style="filled"];
+    "商鞅" [label="商鞅", fillcolor="skyblue", style="filled"];
+    "张仪" [label="张仪", fillcolor="skyblue", style="filled"];
+    "范雎" [label="范雎", fillcolor="skyblue", style="filled"];
+    "秦国" [label="秦国", fillcolor="lightgreen", style="filled"];
+    "戎" [label="戎", fillcolor="lightgreen", style="filled"];
+    "宛" [label="宛", fillcolor="lightgreen", style="filled"];
+    "宋" [label="宋", fillcolor="lightgreen", style="filled"];
+    "晋" [label="晋", fillcolor="lightgreen", style="filled"];
+    "楚" [label="楚", fillcolor="lightgreen", style="filled"];
+    "魏" [label="魏", fillcolor="lightgreen", style="filled"];
+    "巴" [label="巴", fillcolor="lightgreen", style="filled"];
+    "蜀" [label="蜀", fillcolor="lightgreen", style="filled"];
+    "上郡" [label="上郡", fillcolor="lightgreen", style="filled"];
+    "汉中" [label="汉中", fillcolor="lightgreen", style="filled"];
+    "鄢" [label="鄢", fillcolor="lightgreen", style="filled"];
+    "郢" [label="郢", fillcolor="lightgreen", style="filled"];
+    "成皋" [label="成皋", fillcolor="lightgreen", style="filled"];
+    "求士" [label="求士", fillcolor="salmon", style="filled"];
+    "变法" [label="变法", fillcolor="salmon", style="filled"];
+    "拔三川之地" [label="拔三川之地", fillcolor="salmon", style="filled"];
+    "蚕食诸侯" [label="蚕食诸侯", fillcolor="salmon", style="filled"];
+    "逐客令" [label="逐客令", fillcolor="salmon", style="filled"];
+
+    // Edges
+    "秦穆公" -> "由余";
+    "秦穆公" -> "百里奚" [weight=10];
+    "秦穆公" -> "蹇叔";
+    "秦穆公" -> "丕豹";
+    "秦穆公" -> "公孙支";
+    "秦孝公" -> "商鞅";
+    "秦惠王" -> "张仪";
+    "秦昭王" -> "范雎";
+    "由余" -> "戎";
+    "百里奚" -> "宛";
+    "蹇叔" -> "宋";
+    "丕豹" -> "晋";
+    "公孙支" -> "晋";
+    "秦孝公" -> "秦国";
+    "秦惠王" -> "秦国";
+    "秦昭王" -> "秦国";
+    "李斯" -> "秦国";
+    "秦穆公" -> "求士";
+    "秦孝公" -> "变法";
+    "秦惠王" -> "拔三川之地";
+    "秦昭王" -> "蚕食诸侯";
+    "李斯" -> "逐客令";
+    "秦国" -> "逐客令";
+}
+
