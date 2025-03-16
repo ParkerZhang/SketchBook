@@ -79,8 +79,8 @@ class ChatbotApp(App):
             time.sleep(1)
             url = "http://localhost:11434/api/generate"
             payload = {
-                "model": "mistral",  # Replace with your preferred model
-                #"model": "deepseek-r1:1.5b",  # Replace with your preferred model
+                #"model": "mistral",  # Replace with your preferred model
+                "model": "deepseek-r1:1.5b",  # Replace with your preferred model
                 "prompt": message,
                 "stream": False
             }
