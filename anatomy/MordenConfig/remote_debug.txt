@@ -1,0 +1,2 @@
+java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005 -cp target/classes -Dapp.name="MordenConfig System Overrides" com.example.MordenConfig
+jdb -attach 5005 -sourcepath src/main/java
