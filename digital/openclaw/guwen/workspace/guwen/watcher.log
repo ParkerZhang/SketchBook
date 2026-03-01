@@ -1,0 +1,26 @@
+Sun Feb 22 03:53:11 PM EST 2026: Watching /home/u/.openclaw/workspace/guwen/inbox for new files...
+Sun Feb 22 03:53:11 PM EST 2026: Found /home/u/.openclaw/workspace/guwen/inbox/与韩荆州书.md
+DEBUG: DB_DIR = /home/u/.openclaw/workspace/guwen
+DEBUG: Directory exists? True
+Found 1 markdown files
+
+Processing: /home/u/.openclaw/workspace/guwen/inbox/与韩荆州书.md
+  Created 1 chunks
+  Generating embeddings...
+  ✓ Added 1 documents
+
+✓ Ingestion complete! Total documents: 35
+Sun Feb 22 03:53:12 PM EST 2026: Ingested and removed /home/u/.openclaw/workspace/guwen/inbox/与韩荆州书.md
+Sun Feb 22 04:06:49 PM EST 2026: Watching /home/u/.openclaw/workspace/guwen/inbox for new files...
+Sun Feb 22 04:06:49 PM EST 2026: Found /home/u/.openclaw/workspace/guwen/inbox/古文观止 卷一 周文.md
+DEBUG: DB_DIR = /home/u/.openclaw/workspace/guwen
+DEBUG: Directory exists? True
+Found 1 markdown files
+
+Processing: /home/u/.openclaw/workspace/guwen/inbox/古文观止 卷一 周文.md
+  Created 19 chunks
+  Generating embeddings...
+  ✓ Added 19 documents
+
+✓ Ingestion complete! Total documents: 54
+Sun Feb 22 04:06:52 PM EST 2026: Ingested and removed /home/u/.openclaw/workspace/guwen/inbox/古文观止 卷一 周文.md

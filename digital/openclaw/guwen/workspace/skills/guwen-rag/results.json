@@ -1,0 +1,76 @@
+[
+  {
+    "id": null,
+    "query": "What did Confucius say about learning?",
+    "response": "【原文】子曰：\"学而时习之，不亦说乎？有朋自远方来，不亦乐乎？人不知而不愠，不亦君子乎？\"\n\n【今译】孔子说：“学习并且时常温习所学的知识，不是很愉快吗？有朋友从远方而来，不是很快乐吗？别人不了解自己却不生气，不是一个君子吗？”\n\n【微旨】本章阐述了孔子关于学习的见解。他强调学习不仅在于获取新知，更在于时常复习旧知，并从中获得乐趣；他还提到交友和被理解的重要性，以及即使在不被理解的情况下也能保持内心的平和，体现出君子应有的风范。这些观点体现了儒家注重个人修养和社会交往的价值观。",
+    "sources": [
+      {
+        "content": "## 4. Specific Terminology Mapping\n- **\"道\" (Dao):** Interpret based on the specific text (e.g., Natural Law in Taoism vs. Moral Path in Confucianism).\n- **\"仁\" (Ren):** Focus on the interpersonal ethics context in Confucian texts.\n",
+        "source": "../../guwen/metadata.md",
+        "title": "Knowledge Base Profile: Classical Chinese (古文) ",
+        "distance": 18.458637237548828
+      },
+      {
+        "content": "## 1. Contextual Scope\n- **Subject:** Classical Chinese Literature, Philosophy, and Historical Records (经史子集).\n- **Timeframe:** Pre-Qin (先秦) through the Han Dynasty (汉代).\n- **Language Style:** Concise, high-context Classical Chinese (文言文).\n",
+        "source": "../../guwen/metadata.md",
+        "title": "Knowledge Base Profile: Classical Chinese (古文) ",
+        "distance": 19.703847885131836
+      },
+      {
+        "content": "## 3. Retrieval Logic (RAG Optimization)\n- **Chunking Preference:** Treat each chapter (`##`) or poem as a single semantic unit.\n- **Reference Style:** Always cite the specific document and section name when quoting (e.g., \"According to 《论语·学而》...\").\n",
+        "source": "../../guwen/metadata.md",
+        "title": "Knowledge Base Profile: Classical Chinese (古文) ",
+        "distance": 19.980060577392578
+      },
+      {
+        "content": "## 2. Operational Instructions for OpenClaw\n- **Primary Task:** When a user queries this folder, prioritize finding the original source text (原文).\n- **Secondary Task:** Provide a modern Mandarin translation (白话文) and a brief grammatical analysis (词义解析) of key particles (如：之、乎、者、也).\n- **Tone:** Academic, respectful, and scholarly (儒雅、严谨).\n",
+        "source": "../../guwen/metadata.md",
+        "title": "Knowledge Base Profile: Classical Chinese (古文) ",
+        "distance": 20.083362579345703
+      },
+      {
+        "content": "## 学而第一《论语》 子曰：\"学而时习之，不亦说乎？有朋自远方来，不亦乐乎？人不知而不愠，不亦君子乎？\" 有子曰：\"其为人也孝弟，而好犯上者，鲜矣；不好犯上，而好作乱者，未之有也。君子务本，本立而道生。孝弟也者，其为仁之本与！\" 子曰：\"巧言令色，鲜矣仁！\" 曾子曰：\"吾日三省吾身：为人谋而不忠乎？与朋友交而不信乎？传不习乎？\" 子曰：\"道千乘之国，敬事而信，节用而爱人，使民以时。\" 子曰：\"弟子入则孝，出则弟，谨而信，泛爱众，而亲仁。行有余力，则以学文。\" 子夏曰：\"贤贤易色；事父母，能竭其力；事君，能致其身；与朋友交，言而有信。虽曰未学，吾必谓之学矣。\" 子曰：\"君子不重，则不威；学则不固。主忠信，无友不如己者。过，则勿惮改。\" 曾子曰：\"慎终，追远，民德归厚矣。\" 子禽问于子贡曰：\"夫子至于是邦也，必闻其政，求之与，抑与之与？\"子贡曰：\"夫子温、良、恭、俭、让以得之。夫子之求之也，其诸异乎人之求之与？\" 子曰：\"父在，观其志；父没，观其行；三年无改于父之道，可谓孝矣。\" 有子曰：\"礼之用，和为贵。先王之道，斯为美；小大由之。有所不行，知和而和，不以礼节之，亦不可行也。\" 有子曰...",
+        "source": "../../guwen/classics/lunyu.md",
+        "title": "学而第一《论语》",
+        "distance": 20.262216567993164
+      }
+    ]
+  },
+  {
+    "id": null,
+    "query": "What is the Dao?",
+    "response": "【原文】孔子曰：“道不同，不相为谋。”\n\n【今译】孔子说：“理念或路径不同，就不应互相谋划。”\n\n【微旨】此句出自《论语》，指不同的哲学体系或价值观难以在根本上达成共识。在儒家思想中，“道”更多指的是人伦道德和社会秩序的基本原则；而在道家思想中，则更侧重于自然无为的法则。“道”的概念因文而异，需结合具体上下文理解其确切含义。\n\n此回答简要解释了“道”一词在不同哲学流派中的含义，并引用《论语》中的句子作为例证。",
+    "sources": [
+      {
+        "content": "## 4. Specific Terminology Mapping\n- **\"道\" (Dao):** Interpret based on the specific text (e.g., Natural Law in Taoism vs. Moral Path in Confucianism).\n- **\"仁\" (Ren):** Focus on the interpersonal ethics context in Confucian texts.\n",
+        "source": "../../guwen/metadata.md",
+        "title": "Knowledge Base Profile: Classical Chinese (古文) ",
+        "distance": 19.014787673950195
+      },
+      {
+        "content": "## 1. Contextual Scope\n- **Subject:** Classical Chinese Literature, Philosophy, and Historical Records (经史子集).\n- **Timeframe:** Pre-Qin (先秦) through the Han Dynasty (汉代).\n- **Language Style:** Concise, high-context Classical Chinese (文言文).\n",
+        "source": "../../guwen/metadata.md",
+        "title": "Knowledge Base Profile: Classical Chinese (古文) ",
+        "distance": 19.123397827148438
+      },
+      {
+        "content": "## 2. Operational Instructions for OpenClaw\n- **Primary Task:** When a user queries this folder, prioritize finding the original source text (原文).\n- **Secondary Task:** Provide a modern Mandarin translation (白话文) and a brief grammatical analysis (词义解析) of key particles (如：之、乎、者、也).\n- **Tone:** Academic, respectful, and scholarly (儒雅、严谨).\n",
+        "source": "../../guwen/metadata.md",
+        "title": "Knowledge Base Profile: Classical Chinese (古文) ",
+        "distance": 19.17572021484375
+      },
+      {
+        "content": "## 3. Retrieval Logic (RAG Optimization)\n- **Chunking Preference:** Treat each chapter (`##`) or poem as a single semantic unit.\n- **Reference Style:** Always cite the specific document and section name when quoting (e.g., \"According to 《论语·学而》...\").\n",
+        "source": "../../guwen/metadata.md",
+        "title": "Knowledge Base Profile: Classical Chinese (古文) ",
+        "distance": 19.798500061035156
+      },
+      {
+        "content": "# Knowledge Base Profile: Classical Chinese (古文) \n",
+        "source": "../../guwen/metadata.md",
+        "title": "Knowledge Base Profile: Classical Chinese (古文) ",
+        "distance": 19.80556297302246
+      }
+    ]
+  }
+]
