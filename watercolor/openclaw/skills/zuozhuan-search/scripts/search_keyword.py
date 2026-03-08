@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
 Simple keyword search for Zuo Zhuan (no vector DB required).
 
@@ -7,11 +7,12 @@ which works well for classical Chinese where exact character matches
 are often more useful than semantic similarity.
 
 Usage:
-    python3 search_keyword.py <query> [n_results]
+    python search_keyword.py <query> [n_results]
+    pyenv exec python3 search_keyword.py <query> [n_results]
     
 Examples:
-    python3 search_keyword.py "郑伯克段" 5
-    python3 search_chinese.py "二年春" 10
+    python search_keyword.py "郑伯克段" 5
+    python search_chinese.py "二年春" 10
 """
 
 import json
@@ -82,10 +83,10 @@ def highlight_matches(text: str, query: str, max_len: int = 150) -> str:
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python3 search_keyword.py <query> [n_results]")
+        print("Usage: python search_keyword.py <query> [n_results]")
         print("Examples:")
-        print("  python3 search_keyword.py '郑伯克段' 5")
-        print("  python3 search_keyword.py '二年春' 10")
+        print("  python search_keyword.py '郑伯克段' 5")
+        print("  python search_keyword.py '二年春' 10")
         sys.exit(1)
     
     query = sys.argv[1]

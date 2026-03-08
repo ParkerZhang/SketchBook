@@ -1,9 +1,10 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
 Embed zuozhuan chunks into Chroma vector database.
 
 Usage:
-    python3 embed_chroma.py
+    python embed_chroma.py
+    pyenv exec python3 embed_chroma.py
 
 Output:
     Creates/updates Chroma DB at ~/.openclaw/workspace/zuozhuan_chroma/
@@ -14,7 +15,6 @@ import os
 from pathlib import Path
 
 import chromadb
-from chromadb.config import Settings
 
 INPUT_FILE = "/Users/u/.openclaw/workspace/knowledge/zuozhuan_chunks.jsonl"
 CHROMA_DIR = "/Users/u/.openclaw/workspace/zuozhuan_chroma/"
@@ -37,12 +37,7 @@ def main():
 
     # Initialize Chroma (persistent) - API for v0.3.x
     print(f"\nInitializing Chroma DB at {CHROMA_DIR}...")
-    settings = Settings(
-        chroma_db_impl="duckdb+parquet",
-        persist_directory=CHROMA_DIR
-    )
-    client = chromadb.Client(settings)
-
+    client = chromadb.PersistentClient(path=CHROMA_DIR)
     # Get or create collection
     collection = client.get_or_create_collection(
         name=COLLECTION_NAME,

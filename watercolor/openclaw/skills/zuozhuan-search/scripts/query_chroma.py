@@ -1,13 +1,13 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
 Query the Zuo Zhuan Chroma database.
 
 Usage:
-    python3 query_chroma.py <search_query> [n_results]
+    python query_chroma.py <search_query> [n_results]
     
 Examples:
-    python3 query_chroma.py "郑庄公" 5
-    python3 query_chroma.py "二年春" 3
+    python query_chroma.py "郑庄公" 5
+    python query_chroma.py "二年春" 3
 """
 
 import sys
@@ -37,22 +37,17 @@ def keyword_search(chunks, query, n_results=5):
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python3 query_chroma.py <search_query> [n_results]")
+        print("Usage: python query_chroma.py <search_query> [n_results]")
         print("Examples:")
-        print("  python3 query_chroma.py '郑庄公' 5")
-        print("  python3 query_chroma.py '二年春' 3")
+        print("  python query_chroma.py '郑庄公' 5")
+        print("  python query_chroma.py '二年春' 3")
         sys.exit(1)
     
     query = sys.argv[1]
     n_results = int(sys.argv[2]) if len(sys.argv) > 2 else 5
     
     # Initialize Chroma
-    settings = Settings(
-        chroma_db_impl="duckdb+parquet",
-        persist_directory=CHROMA_DIR
-    )
-    client = chromadb.Client(settings)
-    
+    client = chromadb.PersistentClient(path=CHROMA_DIR) 
     # Get collection
     collection = client.get_collection(COLLECTION_NAME)
     

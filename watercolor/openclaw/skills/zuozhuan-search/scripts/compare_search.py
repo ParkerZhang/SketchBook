@@ -1,9 +1,9 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
 Compare keyword search vs vector search results.
 
 Usage:
-    python3 compare_search.py <query> [n_results]
+    python compare_search.py <query> [n_results]
 """
 
 import json
@@ -71,7 +71,7 @@ def vector_search(query, n_results=5):
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python3 compare_search.py <query> [n_results]")
+        print("Usage: python compare_search.py <query> [n_results]")
         sys.exit(1)
     
     query = sys.argv[1]
