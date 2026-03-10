@@ -6,7 +6,7 @@ set -e
 
 # === CONFIG ===
 OLLAMA_URL="http://localhost:11434"
-MODEL_HIGH="qwen3:8b"
+MODEL="qwen3:8b"
 MODEL="qwen3.5:0.8b"
 #SEARCH_SCRIPT="/Users/u/.openclaw/workspace/skills/zuozhuan-search/scripts/query_chroma.py"
 SEARCH_SCRIPT="/Users/u/.openclaw/workspace/skills/zuozhuan-search/scripts/query_chroma_xml.py"
@@ -148,7 +148,7 @@ LLM_JSON=$(jq -Rn \
   --arg prompt "$PROMPT_STEP4" \
   --arg xml "$XML_OUTPUT" \
   --arg query "$USER_QUERY" \
-  --arg model "$MODEL_HIGH" \
+  --arg model "$MODEL" \
 '{
   model: $model,
   messages: [
