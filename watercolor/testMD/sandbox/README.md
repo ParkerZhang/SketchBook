@@ -31,3 +31,11 @@ npm run run:sandbox
 - Sandbox classes extend real classes in `src/`
 - No modification to `src/` or `test/`
 - All new logic lives in `sandbox/`
+
+---
+
+## Stage 3 — Demo Flow Moved to Tests
+
+- The demo scenario previously in `SandboxRunner.ts` is now a repeatable test.
+- `SandboxRunner.ts` is reserved for CLI mode in Stage 4.
+- A new test file `stage3.demoFlow.test.ts` validates the full meeting lifecycle.
