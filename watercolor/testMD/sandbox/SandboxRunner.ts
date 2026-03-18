@@ -1,23 +1,38 @@
 import { AgentSandbox } from './AgentSandbox';
-import { Meeting } from './Meeting';
+import { MeetingEngine } from './MeetingEngine';
 
-class SandboxRunner {
-  static run(): void {
-    const alice = new AgentSandbox('Alice');
-    const bob = new AgentSandbox('Bob');
-    const carol = new AgentSandbox('Carol');
+const engine = new MeetingEngine();
 
-    const meeting = new Meeting();
-    meeting.broadcastGreetings();
-    
-    meeting.addAgent(alice);
-    console.log('');
-    meeting.addAgent(bob);
-    console.log('');
-    meeting.addAgent(carol);
+engine.sendCommand({ type: 'start', subject: 'Project Review' });
+engine.tick();
 
-    console.log('\n=== Meeting Complete ===\n');
-  }
-}
+const meeting = engine.getMeeting('Project Review')!;
 
-SandboxRunner.run();
+const alice = new AgentSandbox('Alice');
+const bob = new AgentSandbox('Bob');
+const carol = new AgentSandbox('Carol');
+
+meeting.addAgent(alice);
+meeting.addAgent(bob);
+meeting.addAgent(carol);
+
+console.log('\n--- Meeting Log ---\n');
+console.log(meeting.log.join('\n'));
+
+engine.sendCommand({ type: 'note', subject: 'Project Review', text: 'Discuss Q1 goals' });
+engine.tick();
+
+console.log('\n--- Pausing Meeting ---\n');
+engine.sendCommand({ type: 'stop', subject: 'Project Review' });
+engine.tick();
+
+console.log('\n--- Resuming Meeting ---\n');
+engine.sendCommand({ type: 'resume', subject: 'Project Review' });
+engine.tick();
+
+console.log('\n--- Final Log ---\n');
+console.log(meeting.log.join('\n'));
+
+console.log('\n--- Ending Meeting ---\n');
+engine.sendCommand({ type: 'end', subject: 'Project Review' });
+engine.tick();
