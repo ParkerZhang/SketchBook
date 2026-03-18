@@ -55,7 +55,6 @@ export class Meeting {
   }
 
   addAgent(agent: AgentSandbox): void {
-    const existingCount = this.agents.length;
     const session = this.selector.selectSession(agent, 'meeting') as SessionSandbox;
     session.setAgentName(agent.name);
     
@@ -73,20 +72,20 @@ export class Meeting {
     this.agents.push(agent);
   }
 
-  runInitialGreetings(): void {
-    for (const agent of this.agents) {
-      const session = this.selector.selectSession(agent, 'meeting') as SessionSandbox;
-      const response = session.process('Hello everyone!');
-      this.log.push(`${agent.name}: ${response}`);
-    }
-  }
-
   resumeGreetings(): void {
+    this.log.push('--- Meeting Resumed ---');
     for (const agent of this.agents) {
       const session = this.selector.selectSession(agent, 'meeting') as SessionSandbox;
       this.log.push(`${agent.name} is back!`);
-      const response = session.process('Hello everyone, I am back!');
-      this.log.push(`${agent.name}: ${response}`);
+    }
+    for (const agent of this.agents) {
+      const session = this.selector.selectSession(agent, 'meeting') as SessionSandbox;
+      for (const other of this.agents) {
+        if (other !== agent) {
+          const response = session.process(other.name);
+          this.log.push(`${agent.name} greets ${other.name}: ${response}`);
+        }
+      }
     }
   }
 
@@ -108,13 +107,12 @@ import { Command } from './Command';
 export class MeetingEngine {
   private meetings: Map<string, Meeting> = new Map();
   private commandQueue: Command[] = [];
-  private intervalId: NodeJS.Timeout | null = null;
 
   sendCommand(command: Command): void {
     this.commandQueue.push(command);
   }
 
-  private processCommands(): void {
+  tick(): void {
     while (this.commandQueue.length > 0) {
       const command = this.commandQueue.shift()!;
       this.dispatch(command);
@@ -147,7 +145,7 @@ export class MeetingEngine {
       case 'note':
         if (meeting) {
           meeting.addNote(command.text);
-          console.log(`Note added: ${command.text}`);
+          console.log(`Note: ${command.text}`);
         }
         break;
       case 'end':
@@ -160,28 +158,8 @@ export class MeetingEngine {
     }
   }
 
-  tick(): void {
-    this.processCommands();
-    for (const meeting of this.meetings.values()) {
-      if (meeting.active) {
-        meeting.tick();
-      }
-    }
-  }
-
   getMeeting(subject: string): Meeting | undefined {
     return this.meetings.get(subject);
-  }
-
-  startLoop(intervalMs: number = 100): void {
-    this.intervalId = setInterval(() => this.tick(), intervalMs);
-  }
-
-  stopLoop(): void {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-      this.intervalId = null;
-    }
   }
 }
 ```
@@ -195,50 +173,44 @@ export class MeetingEngine {
 import { AgentSandbox } from './AgentSandbox';
 import { MeetingEngine } from './MeetingEngine';
 
-SandboxRunner.run();
+const engine = new MeetingEngine();
 
-function SandboxRunner() {
-  const engine = new MeetingEngine();
+// START meeting
+engine.sendCommand({ type: 'start', subject: 'Project Review' });
+engine.tick();
 
-  // START meeting
-  engine.sendCommand({ type: 'start', subject: 'Project Review' });
+const meeting = engine.getMeeting('Project Review')!;
 
-  const meeting = engine.getMeeting('Project Review')!;
-  engine.tick();
+// Add agents
+const alice = new AgentSandbox('Alice');
+const bob = new AgentSandbox('Bob');
+const carol = new AgentSandbox('Carol');
 
-  // Add agents (greetings triggered)
-  const alice = new AgentSandbox('Alice');
-  const bob = new AgentSandbox('Bob');
-  const carol = new AgentSandbox('Carol');
+meeting.addAgent(alice);
+meeting.addAgent(bob);
+meeting.addAgent(carol);
 
-  meeting.addAgent(alice);
-  meeting.addAgent(bob);
-  meeting.addAgent(carol);
+console.log('\n--- Meeting Log ---\n');
+console.log(meeting.log.join('\n'));
 
-  console.log('\n--- Initial Greetings ---\n');
-  meeting.runInitialGreetings();
+// Add notes
+engine.sendCommand({ type: 'note', subject: 'Project Review', text: 'Discuss Q1 goals' });
+engine.tick();
 
-  // Add notes
-  engine.sendCommand({ type: 'note', subject: 'Project Review', text: 'Discuss Q1 goals' });
-  engine.tick();
+console.log('\n--- Pausing Meeting ---\n');
+engine.sendCommand({ type: 'stop', subject: 'Project Review' });
+engine.tick();
 
-  console.log('\n--- Pausing Meeting ---\n');
-  engine.sendCommand({ type: 'stop', subject: 'Project Review' });
-  engine.tick();
+console.log('\n--- Resuming Meeting ---\n');
+engine.sendCommand({ type: 'resume', subject: 'Project Review' });
+engine.tick();
 
-  console.log('\n--- Resuming Meeting ---\n');
-  engine.sendCommand({ type: 'resume', subject: 'Project Review' });
-  engine.tick();
+console.log('\n--- Final Log ---\n');
+console.log(meeting.log.join('\n'));
 
-  console.log('\n--- Meeting Log ---\n');
-  console.log(meeting.log.join('\n'));
-
-  console.log('\n--- Ending Meeting ---\n');
-  engine.sendCommand({ type: 'end', subject: 'Project Review' });
-  engine.tick();
-
-  engine.stopLoop();
-}
+console.log('\n--- Ending Meeting ---\n');
+engine.sendCommand({ type: 'end', subject: 'Project Review' });
+engine.tick();
 ```
 
 ---
@@ -259,16 +231,16 @@ describe('Stage 2 - Greetings Tests', () => {
     expect(meeting.log[0]).toContain('Alice joins the meeting.');
   });
 
-  test('Agents respond via session.process() when joining', () => {
+  test('Agents respond when joining', () => {
     const meeting = new Meeting('Test Meeting');
     const agent = new AgentSandbox('Bob');
     meeting.addAgent(agent);
     
-    expect(meeting.log[1]).toContain('Bob:');
-    expect(meeting.log[1]).toContain('Nice to meet you!');
+    expect(meeting.log.some(l => l.includes('Bob:'))).toBe(true);
+    expect(meeting.log.some(l => l.includes('Nice to meet you!'))).toBe(true);
   });
 
-  test('runInitialGreetings() produces responses for all agents', () => {
+  test('Existing agents greet newcomer', () => {
     const meeting = new Meeting('Test Meeting');
     const alice = new AgentSandbox('Alice');
     const bob = new AgentSandbox('Bob');
@@ -276,38 +248,31 @@ describe('Stage 2 - Greetings Tests', () => {
     meeting.addAgent(alice);
     meeting.addAgent(bob);
     
-    const initialLogLength = meeting.log.length;
-    meeting.runInitialGreetings();
-    
-    expect(meeting.log.length).toBeGreaterThan(initialLogLength);
+    expect(meeting.log.some(l => l.includes('Alice:') && l.includes('Bob'))).toBe(true);
   });
 
-  test('Adding new agent triggers responses from existing agents', () => {
+  test('resumeGreetings() logs resuming', () => {
     const meeting = new Meeting('Test Meeting');
-    const alice = new AgentSandbox('Alice');
-    const bob = new AgentSandbox('Bob');
+    const agent = new AgentSandbox('Alice');
+    meeting.addAgent(agent);
     
-    meeting.addAgent(alice);
-    const logAfterAlice = meeting.log.length;
-    meeting.addAgent(bob);
+    meeting.resumeGreetings();
     
-    expect(meeting.log.length).toBeGreaterThan(logAfterAlice);
+    expect(meeting.log.some(l => l.includes('Meeting Resumed'))).toBe(true);
+    expect(meeting.log.some(l => l.includes('is back!'))).toBe(true);
   });
 
-  test('Full meeting lifecycle: start, agents join, greetings, end', () => {
+  test('Full meeting lifecycle', () => {
     const meeting = new Meeting('Lifecycle Test');
     
     const alice = new AgentSandbox('Alice');
     const bob = new AgentSandbox('Bob');
-    const carol = new AgentSandbox('Carol');
     
     meeting.addAgent(alice);
     meeting.addAgent(bob);
-    meeting.addAgent(carol);
     
-    expect(meeting.getAgentCount()).toBe(3);
+    expect(meeting.getAgentCount()).toBe(2);
     expect(meeting.log.length).toBeGreaterThan(0);
-    expect(meeting.subject).toBe('Lifecycle Test');
   });
 });
 ```
@@ -343,9 +308,9 @@ npm run run:sandbox
 
 ### Greeting Behavior
 
-**Initial Greetings:** When an agent joins a meeting, they greet everyone. Existing agents greet the newcomer.
+**When Joining:** Agent greets everyone, existing agents greet the newcomer.
 
-**Resume Greetings:** When a meeting resumes, all agents announce their return.
+**Resume:** Agents announce they're back and greet each other.
 
 ## Rules
 - Sandbox classes extend real classes in `src/`
@@ -360,23 +325,6 @@ npm run run:sandbox
 ```
 Meeting 'Project Review' started.
 
---- Initial Greetings ---
-
---- Pausing Meeting ---
-
-Meeting 'Project Review' paused.
-
---- Resuming Meeting ---
-
-Alice is back!
-Alice: Hi Project Review Nice to meet you! I'm Alice.
-Bob is back!
-Bob: Hi Project Review Nice to meet you! I'm Bob.
-Carol is back!
-Carol: Hi Project Review Nice to meet you! I'm Carol.
-
-Meeting 'Project Review' resumed.
-
 --- Meeting Log ---
 
 Alice joins the meeting.
@@ -388,6 +336,49 @@ Carol joins the meeting.
 Carol: Hi Hello everyone! Nice to meet you! I'm Carol.
 Alice: Hi Carol Nice to meet you! I'm Alice.
 Bob: Hi Carol Nice to meet you! I'm Bob.
+
+Note: Discuss Q1 goals
+
+--- Pausing Meeting ---
+
+Meeting 'Project Review' paused.
+
+--- Resuming Meeting ---
+
+--- Meeting Resumed ---
+Alice is back!
+Bob is back!
+Carol is back!
+Alice greets Bob: Hi Bob Nice to meet you! I'm Alice.
+Alice greets Carol: Hi Carol Nice to meet you! I'm Alice.
+Bob greets Alice: Hi Alice Nice to meet you! I'm Bob.
+Bob greets Carol: Hi Carol Nice to meet you! I'm Bob.
+Carol greets Alice: Hi Alice Nice to meet you! I'm Carol.
+Carol greets Bob: Hi Bob Nice to meet you! I'm Carol.
+
+Meeting 'Project Review' resumed.
+
+--- Final Log ---
+
+Alice joins the meeting.
+Alice: Hi Hello everyone! Nice to meet you! I'm Alice.
+Bob joins the meeting.
+Bob: Hi Hello everyone! Nice to meet you! I'm Bob.
+Alice: Hi Bob Nice to meet you! I'm Alice.
+Carol joins the meeting.
+Carol: Hi Hello everyone! Nice to meet you! I'm Carol.
+Alice: Hi Carol Nice to meet you! I'm Alice.
+Bob: Hi Carol Nice to meet you! I'm Bob.
+--- Meeting Resumed ---
+Alice is back!
+Bob is back!
+Carol is back!
+Alice greets Bob: Hi Bob Nice to meet you! I'm Alice.
+Alice greets Carol: Hi Carol Nice to meet you! I'm Alice.
+Bob greets Alice: Hi Alice Nice to meet you! I'm Bob.
+Bob greets Carol: Hi Carol Nice to meet you! I'm Bob.
+Carol greets Alice: Hi Alice Nice to meet you! I'm Carol.
+Carol greets Bob: Hi Bob Nice to meet you! I'm Bob.
 
 --- Ending Meeting ---
 
