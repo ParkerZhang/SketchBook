@@ -1,28 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const src_1 = require("../src");
-describe('Basic Test', () => {
-    test('should create an Agent', () => {
-        const agent = new src_1.Agent('TestAgent');
+const index_1 = require("../src/index");
+describe('Basic tests', () => {
+    test('Create an Agent', () => {
+        const agent = new index_1.Agent('TestAgent');
         expect(agent.name).toBe('TestAgent');
-        expect(agent.sessions).toEqual([]);
+        expect(agent.sessions).toHaveLength(0);
     });
-    test('should create a Session', () => {
-        const session = new src_1.Session('test');
-        expect(session.type).toBe('test');
+    test('Create a Session', () => {
+        const session = new index_1.Session('meeting');
+        expect(session.type).toBe('meeting');
     });
-    test('should call process and return string', () => {
-        const session = new src_1.Session('test');
+    test('Call process() returns a string', () => {
+        const session = new index_1.Session('test');
         const result = session.process('hello');
         expect(typeof result).toBe('string');
-        expect(result).toContain('hello');
+        expect(result).toBe('Processed: hello');
     });
-    test('should create session from Agent', () => {
-        const agent = new src_1.Agent('TestAgent');
-        const session = agent.createSession('meeting');
-        expect(session).toBeInstanceOf(src_1.Session);
-        expect(session.type).toBe('meeting');
+    test('Agent creates and stores sessions', () => {
+        const agent = new index_1.Agent('Alice');
+        const session = agent.createSession('chat');
         expect(agent.sessions).toHaveLength(1);
+        expect(session.type).toBe('chat');
     });
 });
 //# sourceMappingURL=basic.test.js.map

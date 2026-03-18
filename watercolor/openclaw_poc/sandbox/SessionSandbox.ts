@@ -1,11 +1,13 @@
-import { Session } from '../src';
+import { Session } from '../src/Session';
 
 export class SessionSandbox extends Session {
-  constructor() {
-    super('meeting');
+  private agentName: string = 'Unknown';
+
+  setAgentName(name: string): void {
+    this.agentName = name;
   }
 
   process(input: string): string {
-    return `[Meeting] meeting: ${input}`;
+    return `Hi ${input} Nice to meet you! I'm ${this.agentName}.`;
   }
 }

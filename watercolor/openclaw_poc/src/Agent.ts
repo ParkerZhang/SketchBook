@@ -2,11 +2,10 @@ import { Session } from './Session';
 
 export class Agent {
   name: string;
-  sessions: Session[];
+  sessions: Session[] = [];
 
   constructor(name: string) {
     this.name = name;
-    this.sessions = [];
   }
 
   createSession(type: string): Session {

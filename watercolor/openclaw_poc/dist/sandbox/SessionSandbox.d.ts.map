@@ -1,1 +1,1 @@
-{"version":3,"file":"SessionSandbox.d.ts","sourceRoot":"","sources":["../../sandbox/SessionSandbox.ts"],"names":[],"mappings":"AAAA,qBAAa,cAAc;CAE1B"}
+{"version":3,"file":"SessionSandbox.d.ts","sourceRoot":"","sources":["../../sandbox/SessionSandbox.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,MAAM,gBAAgB,CAAC;AAEzC,qBAAa,cAAe,SAAQ,OAAO;IACzC,OAAO,CAAC,SAAS,CAAqB;IAEtC,YAAY,CAAC,IAAI,EAAE,MAAM,GAAG,IAAI;IAIhC,OAAO,CAAC,KAAK,EAAE,MAAM,GAAG,MAAM;CAG/B"}

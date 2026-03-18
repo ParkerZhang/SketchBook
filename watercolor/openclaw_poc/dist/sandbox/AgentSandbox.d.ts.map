@@ -1,1 +1,1 @@
-{"version":3,"file":"AgentSandbox.d.ts","sourceRoot":"","sources":["../../sandbox/AgentSandbox.ts"],"names":[],"mappings":"AAAA,qBAAa,YAAY;CAExB"}
+{"version":3,"file":"AgentSandbox.d.ts","sourceRoot":"","sources":["../../sandbox/AgentSandbox.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,MAAM,cAAc,CAAC;AAErC,qBAAa,YAAa,SAAQ,KAAK;IACrC,iBAAiB;CAGlB"}

@@ -1,29 +1,28 @@
-import { Agent, Session } from '../src';
+import { Agent, Session } from '../src/index';
 
-describe('Basic Test', () => {
-  test('should create an Agent', () => {
+describe('Basic tests', () => {
+  test('Create an Agent', () => {
     const agent = new Agent('TestAgent');
     expect(agent.name).toBe('TestAgent');
-    expect(agent.sessions).toEqual([]);
+    expect(agent.sessions).toHaveLength(0);
   });
 
-  test('should create a Session', () => {
-    const session = new Session('test');
-    expect(session.type).toBe('test');
+  test('Create a Session', () => {
+    const session = new Session('meeting');
+    expect(session.type).toBe('meeting');
   });
 
-  test('should call process and return string', () => {
+  test('Call process() returns a string', () => {
     const session = new Session('test');
     const result = session.process('hello');
     expect(typeof result).toBe('string');
-    expect(result).toContain('hello');
+    expect(result).toBe('Processed: hello');
   });
 
-  test('should create session from Agent', () => {
-    const agent = new Agent('TestAgent');
-    const session = agent.createSession('meeting');
-    expect(session).toBeInstanceOf(Session);
-    expect(session.type).toBe('meeting');
+  test('Agent creates and stores sessions', () => {
+    const agent = new Agent('Alice');
+    const session = agent.createSession('chat');
     expect(agent.sessions).toHaveLength(1);
+    expect(session.type).toBe('chat');
   });
 });

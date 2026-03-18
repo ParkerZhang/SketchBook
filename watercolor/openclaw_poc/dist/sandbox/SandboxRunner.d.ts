@@ -1,3 +1,2 @@
-export declare class SandboxRunner {
-}
+export {};
 //# sourceMappingURL=SandboxRunner.d.ts.map

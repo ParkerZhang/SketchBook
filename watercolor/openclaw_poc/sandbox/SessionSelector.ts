@@ -1,19 +1,15 @@
-import { Agent } from '../src';
+import { Agent } from '../src/Agent';
+import { Session } from '../src/Session';
 import { SessionSandbox } from './SessionSandbox';
 
 export class SessionSelector {
-  private agent: Agent;
-  private meetingSession: SessionSandbox | null = null;
-
-  constructor(agent: Agent) {
-    this.agent = agent;
-  }
-
-  getMeetingSession(): SessionSandbox {
-    if (!this.meetingSession) {
-      this.meetingSession = new SessionSandbox();
-      this.agent.sessions.push(this.meetingSession);
+  selectSession(agent: Agent, type: string): SessionSandbox {
+    const existing = agent.sessions.find(s => s.type === type);
+    if (existing) {
+      return existing as SessionSandbox;
     }
-    return this.meetingSession;
+    const newSession = new SessionSandbox(type);
+    agent.sessions.push(newSession);
+    return newSession;
   }
 }

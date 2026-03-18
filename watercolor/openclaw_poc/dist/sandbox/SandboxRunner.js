@@ -1,7 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SandboxRunner = void 0;
-class SandboxRunner {
-}
-exports.SandboxRunner = SandboxRunner;
+const AgentSandbox_1 = require("./AgentSandbox");
+const MeetingEngine_1 = require("./MeetingEngine");
+const engine = new MeetingEngine_1.MeetingEngine();
+engine.sendCommand({ type: 'start', subject: 'Project Review' });
+engine.tick();
+const meeting = engine.getMeeting('Project Review');
+const alice = new AgentSandbox_1.AgentSandbox('Alice');
+const bob = new AgentSandbox_1.AgentSandbox('Bob');
+const carol = new AgentSandbox_1.AgentSandbox('Carol');
+meeting.addAgent(alice);
+meeting.addAgent(bob);
+meeting.addAgent(carol);
+console.log('\n--- Meeting Log ---\n');
+console.log(meeting.log.join('\n'));
+engine.sendCommand({ type: 'note', subject: 'Project Review', text: 'Discuss Q1 goals' });
+engine.tick();
+console.log('\n--- Pausing Meeting ---\n');
+engine.sendCommand({ type: 'stop', subject: 'Project Review' });
+engine.tick();
+console.log('\n--- Resuming Meeting ---\n');
+engine.sendCommand({ type: 'resume', subject: 'Project Review' });
+engine.tick();
+console.log('\n--- Final Log ---\n');
+console.log(meeting.log.join('\n'));
+console.log('\n--- Ending Meeting ---\n');
+engine.sendCommand({ type: 'end', subject: 'Project Review' });
+engine.tick();
 //# sourceMappingURL=SandboxRunner.js.map

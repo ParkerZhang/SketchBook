@@ -1,16 +1,7 @@
-import { Agent } from '../src';
-import { SessionSandbox } from './SessionSandbox';
-import { SessionSelector } from './SessionSelector';
+import { Agent } from '../src/Agent';
 
 export class AgentSandbox extends Agent {
-  private sessionSelector: SessionSelector;
-
-  constructor(name: string) {
-    super(name);
-    this.sessionSelector = new SessionSelector(this);
-  }
-
-  getMeetingSession(): SessionSandbox {
-    return this.sessionSelector.getMeetingSession();
+  getMeetingSession() {
+    return null;
   }
 }

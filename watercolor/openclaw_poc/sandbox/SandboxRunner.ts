@@ -1,30 +1,38 @@
 import { AgentSandbox } from './AgentSandbox';
-import { Meeting } from './Meeting';
+import { MeetingEngine } from './MeetingEngine';
 
-export class SandboxRunner {
-  static run(): void {
-    console.log('=== Sandbox Demo: Multi-Agent Meeting ===\n');
+const engine = new MeetingEngine();
 
-    const alice = new AgentSandbox('Alice');
-    const bob = new AgentSandbox('Bob');
-    const charlie = new AgentSandbox('Charlie');
+engine.sendCommand({ type: 'start', subject: 'Project Review' });
+engine.tick();
 
-    const meeting = new Meeting();
-    meeting.addAgent(alice);
-    meeting.addAgent(bob);
-    meeting.addAgent(charlie);
+const meeting = engine.getMeeting('Project Review')!;
 
-    console.log(`Meeting started with ${meeting.getAgentCount()} agents.\n`);
-    meeting.broadcastGreetings();
+const alice = new AgentSandbox('Alice');
+const bob = new AgentSandbox('Bob');
+const carol = new AgentSandbox('Carol');
 
-    console.log('\n=== Session Reuse Check ===');
-    const aliceSession1 = alice.getMeetingSession();
-    const aliceSession2 = alice.getMeetingSession();
-    console.log(`Alice's sessions: ${alice.sessions.length}`);
-    console.log(`Session reuse works: ${aliceSession1 === aliceSession2}`);
+meeting.addAgent(alice);
+meeting.addAgent(bob);
+meeting.addAgent(carol);
 
-    console.log('\n=== Demo Complete ===');
-  }
-}
+console.log('\n--- Meeting Log ---\n');
+console.log(meeting.log.join('\n'));
 
-SandboxRunner.run();
+engine.sendCommand({ type: 'note', subject: 'Project Review', text: 'Discuss Q1 goals' });
+engine.tick();
+
+console.log('\n--- Pausing Meeting ---\n');
+engine.sendCommand({ type: 'stop', subject: 'Project Review' });
+engine.tick();
+
+console.log('\n--- Resuming Meeting ---\n');
+engine.sendCommand({ type: 'resume', subject: 'Project Review' });
+engine.tick();
+
+console.log('\n--- Final Log ---\n');
+console.log(meeting.log.join('\n'));
+
+console.log('\n--- Ending Meeting ---\n');
+engine.sendCommand({ type: 'end', subject: 'Project Review' });
+engine.tick();

@@ -1,3 +1,3 @@
 export { Agent } from './Agent';
 export { Session } from './Session';
-export { Message } from './Message';
+export type { Message } from './Message';
