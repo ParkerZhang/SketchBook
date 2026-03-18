@@ -1,0 +1,1 @@
+{"version":3,"file":"Agent.d.ts","sourceRoot":"","sources":["../../src/Agent.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,MAAM,WAAW,CAAC;AAEpC,qBAAa,KAAK;IAChB,IAAI,EAAE,MAAM,CAAC;IACb,QAAQ,EAAE,OAAO,EAAE,CAAC;gBAER,IAAI,EAAE,MAAM;IAKxB,aAAa,CAAC,IAAI,EAAE,MAAM,GAAG,OAAO;CAKrC"}
