@@ -1,1 +1,4 @@
-console.log("SandboxRunner is now reserved for CLI mode (Stage 4).");
+import { Demo } from './Demo';
+
+console.log('Running Stage 4 Demo...\n');
+Demo.run();

@@ -16,6 +16,39 @@ export class MeetingEngine {
     }
   }
 
+  public handleExternalCommand(input: string): void {
+    const command = this.parse(input);
+    this.sendCommand(command);
+    this.tick();
+  }
+
+  private parse(input: string): Command {
+    const trimmed = input.trim();
+    const match = trimmed.match(/^(\w+)\s+"([^"]*)"(?:\s+"([^"]*)")?$/);
+    
+    if (!match) {
+      throw new Error(`Invalid command format: ${input}`);
+    }
+    
+    const [, cmdType, subject, text] = match;
+    
+    switch (cmdType.toLowerCase()) {
+      case 'start':
+        return { type: 'start', subject };
+      case 'stop':
+        return { type: 'stop', subject };
+      case 'resume':
+        return { type: 'resume', subject };
+      case 'note':
+        if (!text) throw new Error('Note command requires text');
+        return { type: 'note', subject, text };
+      case 'end':
+        return { type: 'end', subject };
+      default:
+        throw new Error(`Unknown command: ${cmdType}`);
+    }
+  }
+
   private dispatch(command: Command): void {
     const meeting = this.meetings.get(command.subject);
 

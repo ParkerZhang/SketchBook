@@ -27,6 +27,17 @@ npm run run:sandbox
 
 **Resume:** Agents announce they're back and greet each other.
 
+---
+
+## Stage 4 — External Command Function + CLI
+
+- `MeetingEngine.handleExternalCommand()` is now the universal entry point.
+- Production systems, tests, and CLI all call this function.
+- `CLI.parse()` converts raw text into a `Command`.
+- `SandboxRunner.ts` now launches CLI mode.
+
+---
+
 ## Rules
 - Sandbox classes extend real classes in `src/`
 - No modification to `src/` or `test/`
