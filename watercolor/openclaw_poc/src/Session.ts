@@ -1,8 +1,20 @@
-export class Session {
-  type: string;
+import { Message } from './Message';
 
-  constructor(type: string) {
+export class Session {
+  sessionId: string;
+  agentId: string;
+  type: string;
+  messages: Message[] = [];
+  active: boolean = true;
+
+  constructor(agentId: string, type: string) {
+    this.sessionId = `${agentId}-${type}-${Date.now()}`;
+    this.agentId = agentId;
     this.type = type;
+  }
+
+  addMessage(message: Message): void {
+    this.messages.push(message);
   }
 
   process(input: string): string {

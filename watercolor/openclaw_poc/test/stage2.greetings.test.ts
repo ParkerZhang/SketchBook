@@ -4,7 +4,7 @@ import { AgentSandbox } from '../sandbox/AgentSandbox';
 describe('Stage 2 - Greetings Tests', () => {
   test('Agent joins are logged', () => {
     const meeting = new Meeting('Test Meeting');
-    const agent = new AgentSandbox('Alice');
+    const agent = new AgentSandbox('agent-1', 'Alice');
     meeting.addAgent(agent);
     
     expect(meeting.log[0]).toContain('Alice joins the meeting.');
@@ -12,7 +12,7 @@ describe('Stage 2 - Greetings Tests', () => {
 
   test('Agents respond when joining', () => {
     const meeting = new Meeting('Test Meeting');
-    const agent = new AgentSandbox('Bob');
+    const agent = new AgentSandbox('agent-2', 'Bob');
     meeting.addAgent(agent);
     
     expect(meeting.log.some(l => l.includes('Bob:'))).toBe(true);
@@ -21,8 +21,8 @@ describe('Stage 2 - Greetings Tests', () => {
 
   test('Existing agents greet newcomer', () => {
     const meeting = new Meeting('Test Meeting');
-    const alice = new AgentSandbox('Alice');
-    const bob = new AgentSandbox('Bob');
+    const alice = new AgentSandbox('agent-1', 'Alice');
+    const bob = new AgentSandbox('agent-2', 'Bob');
     
     meeting.addAgent(alice);
     meeting.addAgent(bob);
@@ -32,7 +32,7 @@ describe('Stage 2 - Greetings Tests', () => {
 
   test('resumeGreetings() logs resuming', () => {
     const meeting = new Meeting('Test Meeting');
-    const agent = new AgentSandbox('Alice');
+    const agent = new AgentSandbox('agent-1', 'Alice');
     meeting.addAgent(agent);
     
     meeting.resumeGreetings();
@@ -44,8 +44,8 @@ describe('Stage 2 - Greetings Tests', () => {
   test('Full meeting lifecycle', () => {
     const meeting = new Meeting('Lifecycle Test');
     
-    const alice = new AgentSandbox('Alice');
-    const bob = new AgentSandbox('Bob');
+    const alice = new AgentSandbox('agent-1', 'Alice');
+    const bob = new AgentSandbox('agent-2', 'Bob');
     
     meeting.addAgent(alice);
     meeting.addAgent(bob);
