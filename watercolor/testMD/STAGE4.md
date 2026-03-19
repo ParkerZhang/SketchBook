@@ -402,6 +402,86 @@ Do **not**:
 - Modify earlier tests  
 - Modify `/src`  
 
-This completes Stage 4.
+This completes Stage 4.
+
+---
+
+# 📋 TODO: Stage 5 — Production Integration
+
+Plug meeting into real OpenClaw production classes.
+
+## A. Rename Production Agent
+
+- [ ] Rename `Agent` → `OrgAgent` in `src/Agent.ts`
+- [ ] Update all imports in `src/index.ts`
+- [ ] Update `AgentSandbox` to extend `OrgAgent`
+
+## B. Create Org Class
+
+- [ ] Create `src/Org.ts`:
+  ```typescript
+  export class Org {
+    orgId: string;
+    name: string;
+    meetings: Meeting[];
+    agents: OrgAgent[];
+
+    constructor(orgId: string, name: string);
+    addAgent(agent: OrgAgent): void;
+    getMeeting(subject: string): Meeting | undefined;
+    getAllMeetings(): Meeting[];
+  }
+  ```
+
+## C. Update Meeting Class
+
+- [ ] Add `org: Org` field to `Meeting`
+- [ ] Meeting belongs to one Org
+- [ ] Meeting constructor accepts Org parameter
+
+## D. Plug Into Gateway
+
+- [ ] Gateway loads/creates Org on startup
+- [ ] OrgAgent spawns within Org context
+- [ ] Gateway exposes meeting functions:
+  - `startMeeting(subject)`
+  - `stopMeeting(subject)`
+  - `resumeMeeting(subject)`
+  - `endMeeting(subject)`
+  - `addNote(subject, text)`
+
+## E. Meeting Resume in Gateway
+
+- [ ] `Org.resumeMeetings()` - called by gateway on startup
+- [ ] Resumes all paused meetings
+- [ ] Triggers `resumeGreetings()` for each meeting
+
+## F. File Structure (Updated)
+
+```
+src/                          # Production classes
+├── Agent.ts                  # RENAMED: OrgAgent
+├── Org.ts                    # NEW: Org container
+├── Session.ts
+├── Message.ts
+└── index.ts
+
+sandbox/                      # Sandbox extensions
+├── AgentSandbox.ts           # Extends OrgAgent
+├── OrgSandbox.ts             # NEW: extends Org
+├── Meeting.ts                # Updated: has org
+├── MeetingEngine.ts
+└── ...
+```
+
+## G. Key Relationships
+
+```
+Gateway
+  └── Org (loaded from config)
+        ├── OrgAgent[] (agents in org)
+        └── Meeting[] (meetings in org)
+              └── agents discuss together
+```
 
 

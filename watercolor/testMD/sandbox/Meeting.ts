@@ -68,4 +68,11 @@ export class Meeting {
   getAgentCount(): number {
     return this.agents.length;
   }
+
+  discuss(agent: AgentSandbox, message: string): void {
+    const session = this.selector.selectSession(agent, 'meeting') as SessionSandbox;
+    session.setAgentName(agent.name);
+    const response = session.process(message);
+    this.log.push(`${agent.name}: ${response}`);
+  }
 }

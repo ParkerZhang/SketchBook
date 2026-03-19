@@ -5,3 +5,8 @@ export class AgentSandbox extends Agent {
     return null;
   }
 }
+
+export function createAgentSandbox(name: string): AgentSandbox {
+  const id = `agent-${name.toLowerCase()}-${Date.now()}`;
+  return new AgentSandbox(id, name);
+}

@@ -1,97 +1,125 @@
-# 🌱 Stage 3 — Move Demo Flow Into Test Case & Prepare for CLI Commands  
-All changes occur **only inside `/sandbox`** and **inside `/test`**.  
-Do **not** modify `/src`.
+# 🌱 Stage 3 — Move Demo Flow Into Test Case & Prepare for CLI Commands
 
-The purpose of Stage 3 is to:
-
-- Extract the demo logic from `SandboxRunner.ts`
-- Turn it into a **repeatable, deterministic test case**
-- Prepare the sandbox for a future CLI interface
-- Leave `SandboxRunner.ts` empty or minimal for now
-
-This stage does **not** implement the CLI yet — only prepares for it.
+All changes occur **only inside `/sandbox`** and **inside `/test`**. Do **not** modify `/src`.
 
 ---
 
-## A. Create a New Test File for the Demo Flow
+## A. Add discuss() to Meeting
 
-Create:
+### `sandbox/Meeting.ts`
 
+Add this method to the existing Meeting class:
+
+```typescript
+discuss(agent: AgentSandbox, message: string): void {
+  const session = this.selector.selectSession(agent, 'meeting') as SessionSandbox;
+  session.setAgentName(agent.name);
+  const response = session.process(message);
+  this.log.push(`${agent.name}: ${response}`);
+}
 ```
-test/stage3.demoFlow.test.ts
-```
-
-This test must reproduce the entire Stage 2 demo scenario.
-
-### Required test flow
-
-1. Create a `MeetingEngine`
-2. Send a `start` command for subject `"Project Review"`
-3. Add three agents:
-   - Alice  
-   - Bob  
-   - Carol  
-4. Verify:
-   - join logs  
-   - greeting logs  
-   - cross‑greetings  
-5. Send a `note` command  
-6. Send a `stop` command  
-7. Send a `resume` command  
-8. Verify:
-   - resume logs  
-   - “is back!” messages  
-   - resumed greetings  
-9. Send an `end` command  
-10. Verify:
-   - summary text  
-   - meeting removed from engine  
-
-### Required assertions
-
-```ts
-expect(meeting.log.length).toBeGreaterThan(0);
-expect(meeting.log.some(l => l.includes("joins the meeting"))).toBe(true);
-expect(meeting.log.some(l => l.includes("Nice to meet you"))).toBe(true);
-expect(meeting.notes.length).toBe(1);
-expect(engine.getMeeting("Project Review")).toBeUndefined();
-```
-
-This test replaces the manual demo in `SandboxRunner.ts`.
 
 ---
 
-## B. Update SandboxRunner
+## B. Create Demo Flow Test
 
-Modify:
+### `test/stage3.demoFlow.test.ts`
 
+```typescript
+import { MeetingEngine } from '../sandbox/MeetingEngine';
+import { AgentSandbox } from '../sandbox/AgentSandbox';
+
+describe('Stage 3 - Demo Flow Test', () => {
+  test('Full meeting lifecycle with all commands', () => {
+    const engine = new MeetingEngine();
+
+    // START meeting
+    engine.sendCommand({ type: 'start', subject: 'Project Review' });
+    engine.tick();
+
+    const meeting = engine.getMeeting('Project Review')!;
+    expect(meeting.subject).toBe('Project Review');
+    expect(meeting.active).toBe(true);
+
+    // Add agents - each agent joins and greets
+    const alice = new AgentSandbox('Alice');
+    const bob = new AgentSandbox('Bob');
+    const carol = new AgentSandbox('Carol');
+
+    meeting.addAgent(alice);
+    meeting.addAgent(bob);
+    meeting.addAgent(carol);
+
+    expect(meeting.getAgentCount()).toBe(3);
+    expect(meeting.log.filter(l => l.includes('joins the meeting')).length).toBe(3);
+    expect(meeting.log.filter(l => l.includes('Hello everyone!')).length).toBe(3);
+
+    // Initial discussion
+    meeting.discuss(alice, 'Let\'s discuss Q1 goals.');
+    meeting.discuss(bob, 'I think we should focus on feature X.');
+    meeting.discuss(carol, 'Agreed, plus we need to address tech debt.');
+
+    console.log('\n=== Meeting Log After Joins ===');
+    console.log(meeting.log.join('\n'));
+
+    // Add note
+    engine.sendCommand({ type: 'note', subject: 'Project Review', text: 'Discuss Q1 goals' });
+    engine.tick();
+    expect(meeting.notes.length).toBe(1);
+
+    // Pause meeting
+    engine.sendCommand({ type: 'stop', subject: 'Project Review' });
+    engine.tick();
+    expect(meeting.active).toBe(false);
+
+    // Resume meeting
+    engine.sendCommand({ type: 'resume', subject: 'Project Review' });
+    engine.tick();
+    expect(meeting.active).toBe(true);
+
+    expect(meeting.log.some(l => l.includes('Meeting Resumed'))).toBe(true);
+    expect(meeting.log.filter(l => l.includes('is back!')).length).toBe(3);
+
+    // Discussion after resume
+    meeting.discuss(bob, 'Where were we?');
+    meeting.discuss(alice, 'We were discussing Q1 priorities.');
+    meeting.discuss(carol, 'Right, feature X and tech debt.');
+
+    console.log('\n=== Final Meeting Log ===');
+    console.log(meeting.log.join('\n'));
+
+    // Verify discussions happened
+    expect(meeting.log.some(l => l.includes('discuss Q1 goals'))).toBe(true);
+    expect(meeting.log.some(l => l.includes('feature X'))).toBe(true);
+    expect(meeting.log.some(l => l.includes('tech debt'))).toBe(true);
+    expect(meeting.log.some(l => l.includes('Where were we'))).toBe(true);
+
+    // End meeting
+    engine.sendCommand({ type: 'end', subject: 'Project Review' });
+    engine.tick();
+
+    expect(engine.getMeeting('Project Review')).toBeUndefined();
+  });
+});
 ```
-sandbox/SandboxRunner.ts
-```
 
-Replace all demo logic with:
+---
 
-```ts
+## C. Update SandboxRunner
+
+### `sandbox/SandboxRunner.ts`
+
+```typescript
 console.log("SandboxRunner is now reserved for CLI mode (Stage 4).");
 ```
 
-Do **not** run any meeting logic here.
-
-This file will become the CLI entry point in Stage 4.
-
 ---
 
-## C. Prepare for CLI (Do Not Implement Yet)
+## D. Create CLI Placeholder
 
-Create a placeholder file:
+### `sandbox/CLI.ts`
 
-```
-sandbox/CLI.ts
-```
-
-Add only:
-
-```ts
+```typescript
 export class CLI {
   // Stage 4 will implement:
   // - stdin listener
@@ -100,45 +128,105 @@ export class CLI {
 }
 ```
 
-No logic yet.
+---
+
+## E. Update README
+
+### `sandbox/README.md`
+
+```markdown
+# Sandbox
+
+## Purpose
+
+The sandbox contains experimental code that extends the base classes from `src/`.
+
+## MeetingEngine
+
+The MeetingEngine manages multiple meetings and processes commands.
+
+### Command Types
+- `start` - Create a new meeting
+- `stop` - Pause a meeting
+- `resume` - Resume a paused meeting
+- `note` - Add a note to the meeting
+- `end` - End and summarize the meeting
+
+### Running
+
+```bash
+npm run run:sandbox
+```
+
+### Greeting Behavior
+
+**When Joining:** Agent greets everyone, existing agents greet the newcomer.
+
+**Resume:** Agents announce they're back and greet each other.
+
+### Discussion
+
+Agents can discuss topics using `meeting.discuss(agent, message)`.
+
+## Rules
+- Sandbox classes extend real classes in `src/`
+- No modification to `src/` or `test/`
+- All new logic lives in `sandbox/`
 
 ---
 
-## D. Update README
-
-Modify:
-
-```
-sandbox/README.md
-```
-
-Add a new section:
-
-### Stage 3 — Demo Flow Moved to Tests
+## Stage 3 — Demo Flow Moved to Tests
 
 - The demo scenario previously in `SandboxRunner.ts` is now a repeatable test.
-- `SandboxRunner.ts` is reserved for CLI mode in Stage 4.
+- `SandboxRunner.ts` is reserved for CLI mode in Stage 4.
 - A new test file `stage3.demoFlow.test.ts` validates the full meeting lifecycle.
+- Discussion functionality added with `meeting.discuss()`.
+```
+
+---
+
+## Expected Output
+
+```
+=== Meeting Log After Joins ===
+
+Alice joins the meeting.
+Alice: Hi Hello everyone! Nice to meet you! I'm Alice.
+Bob joins the meeting.
+Bob: Hi Hello everyone! Nice to meet you! I'm Bob.
+Alice: Hi Bob Nice to meet you! I'm Alice.
+Carol joins the meeting.
+Carol: Hi Hello everyone! Nice to meet you! I'm Carol.
+Alice: Hi Carol Nice to meet you! I'm Alice.
+Bob: Hi Carol Nice to meet you! I'm Bob.
+Alice: Hi Let's discuss Q1 goals. Nice to meet you! I'm Alice.
+Bob: Hi I think we should focus on feature X. Nice to meet you! I'm Bob.
+Carol: Hi Agreed, plus we need to address tech debt. Nice to meet you! I'm Carol.
+
+--- Meeting Resumed ---
+Alice is back!
+Bob is back!
+Carol is back!
+Alice greets Bob: Hi Bob Nice to meet you! I'm Alice.
+Alice greets Carol: Hi Carol Nice to meet you! I'm Alice.
+Bob greets Alice: Hi Alice Nice to meet you! I'm Bob.
+Bob greets Carol: Hi Carol Nice to meet you! I'm Bob.
+Carol greets Alice: Hi Alice Nice to meet you! I'm Carol.
+Carol greets Bob: Hi Bob Nice to meet you! I'm Carol.
+Bob: Hi Where were we? Nice to meet you! I'm Bob.
+Alice: Hi We were discussing Q1 priorities. Nice to meet you! I'm Alice.
+Carol: Hi Right, feature X and tech debt. Nice to meet you! I'm Carol.
+```
 
 ---
 
 ## 🛑 STOP POINT E
 
 Stop after:
-
-- Creating `stage3.demoFlow.test.ts`
-- Moving the demo logic into the test
-- Clearing `SandboxRunner.ts` to a placeholder
-- Adding `CLI.ts` as an empty shell
+- Adding `discuss()` method to Meeting
+- Creating `stage3.demoFlow.test.ts` with full demo
+- Clearing `SandboxRunner.ts` to placeholder
+- Adding `CLI.ts` placeholder
 - Updating README
 
-Do **not**:
-
-- Implement CLI parsing  
-- Implement stdin listeners  
-- Modify meeting logic  
-- Modify earlier tests  
-- Modify `/src`  
-
-This completes Stage 3.
-
+This completes Stage 3.

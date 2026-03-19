@@ -24,8 +24,8 @@ export class Demo {
     engine.handleExternalCommand('start "Quick Sync"');
     const meeting = engine.getMeeting('Quick Sync')!;
 
-    const alice = new AgentSandbox('Alice');
-    const bob = new AgentSandbox('Bob');
+    const alice = new AgentSandbox('agent-alice', 'Alice');
+    const bob = new AgentSandbox('agent-bob', 'Bob');
 
     meeting.addAgent(alice);
     meeting.addAgent(bob);
@@ -53,10 +53,10 @@ export class Demo {
     const meeting = engine.getMeeting('Sprint Planning')!;
 
     console.log('--- Agents Joining ---');
-    const alice = new AgentSandbox('Alice');
-    const bob = new AgentSandbox('Bob');
-    const carol = new AgentSandbox('Carol');
-    const dave = new AgentSandbox('Dave');
+    const alice = new AgentSandbox('agent-alice', 'Alice');
+    const bob = new AgentSandbox('agent-bob', 'Bob');
+    const carol = new AgentSandbox('agent-carol', 'Carol');
+    const dave = new AgentSandbox('agent-dave', 'Dave');
 
     meeting.addAgent(alice);
     meeting.addAgent(bob);
