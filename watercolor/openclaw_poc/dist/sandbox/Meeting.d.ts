@@ -13,5 +13,6 @@ export declare class Meeting {
     addAgent(agent: AgentSandbox): void;
     resumeGreetings(): void;
     getAgentCount(): number;
+    discuss(agent: AgentSandbox, message: string): void;
 }
 //# sourceMappingURL=Meeting.d.ts.map

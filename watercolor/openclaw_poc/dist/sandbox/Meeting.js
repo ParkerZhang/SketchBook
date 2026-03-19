@@ -51,6 +51,12 @@ class Meeting {
     getAgentCount() {
         return this.agents.length;
     }
+    discuss(agent, message) {
+        const session = this.selector.selectSession(agent, 'meeting');
+        session.setAgentName(agent.name);
+        const response = session.process(message);
+        this.log.push(`${agent.name}: ${response}`);
+    }
 }
 exports.Meeting = Meeting;
 //# sourceMappingURL=Meeting.js.map
