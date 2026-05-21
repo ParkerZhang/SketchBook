@@ -1,4 +1,4 @@
-# Daily Note: {{date}}
+ Daily Note: {{date}}
 
 ## 🎯 Daily Goals
 - [ ] 

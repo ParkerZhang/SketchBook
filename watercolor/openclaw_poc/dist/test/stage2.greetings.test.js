@@ -5,28 +5,28 @@ const AgentSandbox_1 = require("../sandbox/AgentSandbox");
 describe('Stage 2 - Greetings Tests', () => {
     test('Agent joins are logged', () => {
         const meeting = new Meeting_1.Meeting('Test Meeting');
-        const agent = new AgentSandbox_1.AgentSandbox('Alice');
+        const agent = new AgentSandbox_1.AgentSandbox('agent-1', 'Alice');
         meeting.addAgent(agent);
         expect(meeting.log[0]).toContain('Alice joins the meeting.');
     });
     test('Agents respond when joining', () => {
         const meeting = new Meeting_1.Meeting('Test Meeting');
-        const agent = new AgentSandbox_1.AgentSandbox('Bob');
+        const agent = new AgentSandbox_1.AgentSandbox('agent-2', 'Bob');
         meeting.addAgent(agent);
         expect(meeting.log.some(l => l.includes('Bob:'))).toBe(true);
         expect(meeting.log.some(l => l.includes('Nice to meet you!'))).toBe(true);
     });
     test('Existing agents greet newcomer', () => {
         const meeting = new Meeting_1.Meeting('Test Meeting');
-        const alice = new AgentSandbox_1.AgentSandbox('Alice');
-        const bob = new AgentSandbox_1.AgentSandbox('Bob');
+        const alice = new AgentSandbox_1.AgentSandbox('agent-1', 'Alice');
+        const bob = new AgentSandbox_1.AgentSandbox('agent-2', 'Bob');
         meeting.addAgent(alice);
         meeting.addAgent(bob);
         expect(meeting.log.some(l => l.includes('Alice:') && l.includes('Bob'))).toBe(true);
     });
     test('resumeGreetings() logs resuming', () => {
         const meeting = new Meeting_1.Meeting('Test Meeting');
-        const agent = new AgentSandbox_1.AgentSandbox('Alice');
+        const agent = new AgentSandbox_1.AgentSandbox('agent-1', 'Alice');
         meeting.addAgent(agent);
         meeting.resumeGreetings();
         expect(meeting.log.some(l => l.includes('Meeting Resumed'))).toBe(true);
@@ -34,8 +34,8 @@ describe('Stage 2 - Greetings Tests', () => {
     });
     test('Full meeting lifecycle', () => {
         const meeting = new Meeting_1.Meeting('Lifecycle Test');
-        const alice = new AgentSandbox_1.AgentSandbox('Alice');
-        const bob = new AgentSandbox_1.AgentSandbox('Bob');
+        const alice = new AgentSandbox_1.AgentSandbox('agent-1', 'Alice');
+        const bob = new AgentSandbox_1.AgentSandbox('agent-2', 'Bob');
         meeting.addAgent(alice);
         meeting.addAgent(bob);
         expect(meeting.getAgentCount()).toBe(2);

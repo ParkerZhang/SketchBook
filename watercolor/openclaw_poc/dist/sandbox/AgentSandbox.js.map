@@ -1,1 +1,1 @@
-{"version":3,"file":"AgentSandbox.js","sourceRoot":"","sources":["../../sandbox/AgentSandbox.ts"],"names":[],"mappings":";;;AAAA,wCAAqC;AAErC,MAAa,YAAa,SAAQ,aAAK;IACrC,iBAAiB;QACf,OAAO,IAAI,CAAC;IACd,CAAC;CACF;AAJD,oCAIC"}
+{"version":3,"file":"AgentSandbox.js","sourceRoot":"","sources":["../../sandbox/AgentSandbox.ts"],"names":[],"mappings":";;;AAAA,wCAAqC;AAErC,MAAa,YAAa,SAAQ,aAAK;IACrC,YAAY,OAAe,EAAE,IAAY,EAAE,SAAkB;QAC3D,KAAK,CAAC,OAAO,EAAE,IAAI,EAAE,SAAS,CAAC,CAAC;IAClC,CAAC;IAED,iBAAiB;QACf,OAAO,IAAI,CAAC;IACd,CAAC;CACF;AARD,oCAQC"}

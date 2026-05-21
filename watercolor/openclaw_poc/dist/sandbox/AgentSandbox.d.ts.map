@@ -1,1 +1,1 @@
-{"version":3,"file":"AgentSandbox.d.ts","sourceRoot":"","sources":["../../sandbox/AgentSandbox.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,MAAM,cAAc,CAAC;AAErC,qBAAa,YAAa,SAAQ,KAAK;IACrC,iBAAiB;CAGlB"}
+{"version":3,"file":"AgentSandbox.d.ts","sourceRoot":"","sources":["../../sandbox/AgentSandbox.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,MAAM,cAAc,CAAC;AAErC,qBAAa,YAAa,SAAQ,KAAK;gBACzB,OAAO,EAAE,MAAM,EAAE,IAAI,EAAE,MAAM,EAAE,SAAS,CAAC,EAAE,MAAM;IAI7D,iBAAiB;CAGlB"}

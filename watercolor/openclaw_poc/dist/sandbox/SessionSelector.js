@@ -8,7 +8,7 @@ class SessionSelector {
         if (existing) {
             return existing;
         }
-        const newSession = new SessionSandbox_1.SessionSandbox(type);
+        const newSession = new SessionSandbox_1.SessionSandbox(agent.agentId, type);
         agent.sessions.push(newSession);
         return newSession;
     }

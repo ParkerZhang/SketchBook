@@ -10,9 +10,9 @@ describe('Stage 3 - Demo Flow Test', () => {
         const meeting = engine.getMeeting('Project Review');
         expect(meeting.subject).toBe('Project Review');
         expect(meeting.active).toBe(true);
-        const alice = new AgentSandbox_1.AgentSandbox('Alice');
-        const bob = new AgentSandbox_1.AgentSandbox('Bob');
-        const carol = new AgentSandbox_1.AgentSandbox('Carol');
+        const alice = new AgentSandbox_1.AgentSandbox('agent-1', 'Alice');
+        const bob = new AgentSandbox_1.AgentSandbox('agent-2', 'Bob');
+        const carol = new AgentSandbox_1.AgentSandbox('agent-3', 'Carol');
         meeting.addAgent(alice);
         meeting.addAgent(bob);
         meeting.addAgent(carol);
