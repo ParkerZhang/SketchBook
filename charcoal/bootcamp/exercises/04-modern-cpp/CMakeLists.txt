@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.10)
+project(ex04_modern_cpp)
+set(CMAKE_CXX_STANDARD 17)
+find_package(Threads REQUIRED)
+
+add_executable(ex01_move_starter      ex01_move_starter.cpp)
+add_executable(ex01_move_solution     ex01_move_solution.cpp)
+add_executable(ex02_lambda_starter    ex02_lambda_starter.cpp)
+add_executable(ex02_lambda_solution   ex02_lambda_solution.cpp)
+add_executable(ex03_clamp_starter     ex03_clamp_starter.cpp)
+add_executable(ex03_clamp_solution    ex03_clamp_solution.cpp)
+add_executable(ex04_threads_starter   ex04_threads_starter.cpp)
+add_executable(ex04_threads_solution  ex04_threads_solution.cpp)
+
+target_link_libraries(ex04_threads_starter  Threads::Threads)
+target_link_libraries(ex04_threads_solution Threads::Threads)

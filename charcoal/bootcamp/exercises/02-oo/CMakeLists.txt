@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.10)
+project(ex02_oo)
+set(CMAKE_CXX_STANDARD 17)
+
+add_executable(ex01_counter_starter        ex01_counter_starter.cpp)
+add_executable(ex01_counter_solution       ex01_counter_solution.cpp)
+add_executable(ex02_matrix_raii_starter    ex02_matrix_raii_starter.cpp)
+add_executable(ex02_matrix_raii_solution   ex02_matrix_raii_solution.cpp)
+add_executable(ex03_unique_ptr_starter     ex03_unique_ptr_starter.cpp)
+add_executable(ex03_unique_ptr_solution    ex03_unique_ptr_solution.cpp)
+add_executable(ex04_shared_ptr_starter     ex04_shared_ptr_starter.cpp)
+add_executable(ex04_shared_ptr_solution    ex04_shared_ptr_solution.cpp)

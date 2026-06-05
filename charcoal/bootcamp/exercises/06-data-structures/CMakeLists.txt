@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.10)
+project(ex06_data_structures)
+set(CMAKE_CXX_STANDARD 17)
+
+add_executable(ex01_dsu_starter            ex01_dsu_starter.cpp)
+add_executable(ex01_dsu_solution           ex01_dsu_solution.cpp)
+add_executable(ex02_fenwick_starter        ex02_fenwick_starter.cpp)
+add_executable(ex02_fenwick_solution       ex02_fenwick_solution.cpp)
+add_executable(ex03_segtree_starter        ex03_segtree_starter.cpp)
+add_executable(ex03_segtree_solution       ex03_segtree_solution.cpp)
+add_executable(ex04_sparse_table_starter   ex04_sparse_table_starter.cpp)
+add_executable(ex04_sparse_table_solution  ex04_sparse_table_solution.cpp)
